@@ -1,8 +1,8 @@
 {
+  "nodeVersion": "22.11.0",
   "buildCommand": "npm run build",
   "installCommand": "npm install --include=dev",
   "outputDirectory": "dist",
-  "nodeVersion": "22.11.0",
   "rewrites": [
     {
       "source": "/*",
