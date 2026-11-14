@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="低空原理实验室">
+  <rect width="64" height="64" rx="14" fill="#0B3D91" />
+  <g fill="none" stroke="#8ba8ff" stroke-width="1.4" opacity="0.55">
+    <path d="M8 22h48M8 32h48M8 42h48M20 12v40M32 12v40M44 12v40" />
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round">
+    <path d="M14 40c8-2 12-6 14-12" />
+    <path d="M28 28c6 0 12 2 18 6" />
+  </g>
+  <circle cx="14" cy="40" r="3.4" fill="#FF6B35" />
+  <circle cx="46" cy="34" r="3" fill="#FF6B35" />
+</svg>
