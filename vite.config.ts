@@ -8,6 +8,18 @@ import spaFallback from './vite/plugins/spa-fallback'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), katexFontTrim(), spaFallback()],
+  // 云端发布/预览：监听 0.0.0.0 并放行反代 Host，避免反向代理下被 host 校验拦截
+  server: {
+    host: '0.0.0.0',
+    allowedHosts: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    allowedHosts: true,
+    // 云端发布沙箱注入 PORT，直接读取，避免经 npm 传参时变量被吃掉
+    port: Number(process.env.PORT) || 4173,
+    strictPort: true,
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
