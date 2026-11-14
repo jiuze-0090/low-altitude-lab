@@ -13,7 +13,7 @@ export default function PageHeader({
   children?: ReactNode
 }) {
   return (
-    <header className="border-b border-hairline bg-surface">
+    <header className="band border-b border-hairline">
       <div className="shell py-8 sm:py-11">
         {eyebrow && (
           <p className="text-2xs font-bold uppercase tracking-[0.16em] text-accent-ink">

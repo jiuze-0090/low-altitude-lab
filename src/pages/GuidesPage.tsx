@@ -60,14 +60,14 @@ export default function GuidesPage() {
       {/* 锚点导航 */}
       <nav
         aria-label="速查卡分节导航"
-        className="sticky top-[var(--header-h)] z-40 border-b border-hairline bg-surface/95 backdrop-blur-md"
+        className="glass-bar sticky top-[var(--header-h)] z-40 border-b"
       >
         <div className="shell no-scrollbar flex gap-1 overflow-x-auto py-2">
           {SECTIONS.map((s) => (
             <a
               key={s.id}
               href={`#${s.id}`}
-              className="shrink-0 rounded-md px-2.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-canvas hover:text-primary"
+              className="shrink-0 rounded-md px-2.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-canvas hover:text-primary-text"
             >
               {s.label}
             </a>
@@ -341,18 +341,19 @@ function HeightScale() {
   const y = (h: number) => 250 - (h / H_MAX) * 220
 
   const bands = [
-    { from: 0, to: 120, fill: '#e6f4ec', stroke: '#157f4d', label: '超低空', sub: '真高 100 m 以下' },
-    { from: 120, to: 1000, fill: '#e8eff9', stroke: '#0b3d91', label: '低空', sub: '100–1000 m' },
-    { from: 1000, to: 6000, fill: '#d3e0f4', stroke: '#0b3d91', label: '中空', sub: '1000–6000 m' },
-    { from: 6000, to: 12000, fill: '#b9cdea', stroke: '#0b3d91', label: '高空', sub: '6000–12000 m' },
-    { from: 12000, to: 13000, fill: '#eef1f6', stroke: '#4a5567', label: '超高空', sub: '12000 m 以上' },
+    { from: 0, to: 120, fill: 'var(--c-scale-1)', stroke: 'var(--c-ok)', label: '超低空', sub: '真高 100 m 以下' },
+    { from: 120, to: 1000, fill: 'var(--c-scale-2)', stroke: 'var(--c-primary-text)', label: '低空', sub: '100–1000 m' },
+    { from: 1000, to: 6000, fill: 'var(--c-scale-3)', stroke: 'var(--c-primary-text)', label: '中空', sub: '1000–6000 m' },
+    { from: 6000, to: 12000, fill: 'var(--c-scale-4)', stroke: 'var(--c-primary-text)', label: '高空', sub: '6000–12000 m' },
+    { from: 12000, to: 13000, fill: 'var(--c-scale-5)', stroke: 'var(--c-text-soft)', label: '超高空', sub: '12000 m 以上' },
   ]
 
   const marks = [
     { h: 120, text: '真高 120 m', note: '微型/轻型/小型适飞空域上限 · 1715' },
     { h: 1000, text: '1000 m', note: '低空 / 中空 分界（真高）' },
     { h: 6000, text: '6000 m', note: '中空 / 高空 分界（真高）· 2002 · 2003' },
-    { h: 6300, text: '6300 m', note: 'A 类高空管制空域下限 · 1555' },
+    // 6300 m 与 6000 m 在标尺上仅隔约 5px，标注下移并加引线，避免压字
+    { h: 6300, text: '6300 m', note: 'A 类高空管制空域下限 · 1555', shift: 26 },
     { h: 8400, text: '8400 m', note: '等待空域高度层间隔换挡点 · 1975' },
     { h: 12000, text: '12000 m', note: '高空上限 · 2002' },
   ]
@@ -381,7 +382,7 @@ function HeightScale() {
             y={(y(b.from) + y(b.to)) / 2 + 3}
             textAnchor="end"
             fontSize="8"
-            fill="#1c222e"
+            fill="var(--c-scale-ink)"
             fontWeight="bold"
           >
             {b.label}
@@ -390,29 +391,48 @@ function HeightScale() {
       ))}
 
       {/* 主轴 */}
-      <line x1="52" y1={y(0)} x2="52" y2={y(H_MAX)} stroke="#1c222e" strokeWidth="1" />
-      <line x1="46" y1={y(0)} x2="78" y2={y(0)} stroke="#1c222e" strokeWidth="1.4" />
-      <text x="44" y={y(0) + 3} textAnchor="end" fontSize="8" fill="#4a5567" fontFamily="monospace">
+      <line x1="52" y1={y(0)} x2="52" y2={y(H_MAX)} stroke="var(--c-scale-ink)" strokeWidth="1" />
+      <line x1="46" y1={y(0)} x2="78" y2={y(0)} stroke="var(--c-scale-ink)" strokeWidth="1.4" />
+      <text x="44" y={y(0) + 3} textAnchor="end" fontSize="8" fill="var(--c-text-soft)" fontFamily="monospace">
         0
       </text>
 
       {/* 刻度标注 */}
-      {marks.map((m) => (
-        <g key={m.h}>
-          <line x1="78" y1={y(m.h)} x2="96" y2={y(m.h)} stroke="#4a5567" strokeWidth="0.9" />
-          <circle cx="52" cy={y(m.h)} r="2.2" fill="#ff6b35" />
-          <text x="100" y={y(m.h) - 2} fontSize="8.5" fill="#1c222e" fontWeight="bold" fontFamily="monospace">
-            {m.text}
-          </text>
-          <text x="100" y={y(m.h) + 8} fontSize="7.5" fill="#667085">
-            {m.note}
-          </text>
-        </g>
-      ))}
+      {marks.map((m) => {
+        const shift = 'shift' in m ? (m.shift as number) : 0
+        const ly = y(m.h)
+        return (
+          <g key={m.h}>
+            <line x1="78" y1={ly} x2="96" y2={ly} stroke="var(--c-text-soft)" strokeWidth="0.9" />
+            {shift > 0 && (
+              <path
+                d={`M 96 ${ly} L 104 ${ly + shift}`}
+                fill="none"
+                stroke="var(--c-text-soft)"
+                strokeWidth="0.9"
+              />
+            )}
+            <circle cx="52" cy={ly} r="2.2" fill="var(--c-accent)" />
+            <text
+              x={shift > 0 ? 106 : 100}
+              y={ly - 2 + shift}
+              fontSize="8.5"
+              fill="var(--c-scale-ink)"
+              fontWeight="bold"
+              fontFamily="monospace"
+            >
+              {m.text}
+            </text>
+            <text x={shift > 0 ? 106 : 100} y={ly + 8 + shift} fontSize="7.5" fill="var(--c-text-muted)">
+              {m.note}
+            </text>
+          </g>
+        )
+      })}
 
       {/* 管制空域 A/B 分界说明 */}
-      <line x1="44" y1={y(6000)} x2="44" y2={y(6300)} stroke="#b84615" strokeWidth="1.6" />
-      <text x="40" y={(y(6000) + y(6300)) / 2 + 3} textAnchor="end" fontSize="7" fill="#b84615" fontFamily="monospace">
+      <line x1="44" y1={y(6000)} x2="44" y2={y(6300)} stroke="var(--c-accent-ink)" strokeWidth="1.6" />
+      <text x="40" y={(y(6000) + y(6300)) / 2 + 3} textAnchor="end" fontSize="7" fill="var(--c-accent-ink)" fontFamily="monospace">
         A/B
       </text>
     </svg>

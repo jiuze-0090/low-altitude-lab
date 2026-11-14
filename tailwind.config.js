@@ -8,16 +8,24 @@ export default {
         primary: {
           DEFAULT: 'var(--c-primary)',
           strong: 'var(--c-primary-strong)',
+          text: 'var(--c-primary-text)',
           soft: 'var(--c-primary-soft)',
           ink: 'var(--c-primary-ink)',
         },
         accent: {
           DEFAULT: 'var(--c-accent)',
+          strong: 'var(--c-accent-strong)',
           soft: 'var(--c-accent-soft)',
           ink: 'var(--c-accent-ink)',
         },
         canvas: 'var(--c-bg)',
-        surface: 'var(--c-surface)',
+        surface: {
+          DEFAULT: 'var(--c-surface)',
+          '2': 'var(--c-surface-2)',
+          hover: 'var(--c-surface-hover)',
+        },
+        band: 'var(--c-band)',
+        elevated: 'var(--c-elevated)',
         // 仪表盘深底色阶 —— 深底上的文字/描边必须走这一组，
         // 直接用 ink.* 压在深底上对比度不足。
         panel: {

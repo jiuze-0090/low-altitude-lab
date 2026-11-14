@@ -5,54 +5,16 @@
    1. 所有颜色 / 字号 / 间距 / 圆角 / 阴影 / 字体，一律以本文件的 CSS 变量为准。
    2. Tailwind 配置 (tailwind.config.js) 只做变量映射，不写死字面量。
    3. 改设计 = 只改本文件，组件层零改动。
+
+   主题（由 <html data-theme="..."> 驱动，切换逻辑见 ThemeSwitcher.tsx）：
+   ----------------------------------------------------------------------------
+   brand  品牌深空（默认）—— 深蓝紫光晕，与官网 www.nbyteair.com 同源
+   bright 明朗             —— 冷调浅色，白天 / 投影 / 打印
+   night  夜间护眼         —— 近黑低对比、去蓝光，长时间阅读
    ========================================================================== */
 
+/* ── 主题无关：字体 / 间距 / 圆角 / 动效 / 布局 ───────────────────────────── */
 :root {
-  /* ── 颜色 · 品牌 ─────────────────────────────────────────────────────── */
-  --c-primary: #0b3d91; /* 主色 · 深海蓝（航空仪表主刻度） */
-  --c-primary-strong: #082c6b; /* 主色按压态 */
-  --c-primary-soft: #e8eff9; /* 主色浅底（选中/标签） */
-  --c-primary-ink: #0a2f6e; /* 主色文字（浅底上的可读色） */
-  --c-accent: #ff6b35; /* 强调色 · 橙（告警/关键读数） */
-  --c-accent-soft: #fff0e9; /* 强调色浅底 */
-  --c-accent-ink: #b84615; /* 强调色文字（浅底上的可读色，对 --c-accent-soft 达 4.8:1）*/
-
-  /* ── 颜色 · 中性 ─────────────────────────────────────────────────────── */
-  --c-bg: #f7f9fc; /* 页面背景 */
-  --c-surface: #ffffff; /* 卡片 / 面板底 */
-
-  --c-text: #1c222e; /* 正文 */
-  --c-text-soft: #4a5567; /* 次级文字 */
-  --c-text-muted: #667085; /* 弱化文字 / 刻度标签（对 --c-bg 达 4.6:1）*/
-  --c-border: #dfe5ee; /* 描边 */
-  --c-border-strong: #c6cedb; /* 强调描边 */
-
-  /* ── 颜色 · 状态 ─────────────────────────────────────────────────────── */
-  --c-ok: #157f4d; /* 正确 / 已生效 */
-  --c-warn: #b45309; /* 需注意 */
-  --c-bad: #c0342b; /* 错误 / 危险 */
-  --c-info: #0b6a8f; /* 中性提示 */
-  --c-ok-soft: #e6f4ec;
-  --c-warn-soft: #fdf1e0;
-  --c-bad-soft: #fbeceb;
-
-  /* ── 颜色 · 仪表盘深底（仅用于读数区/交互画布）─────────────────────────
-     浅底正文色压深底必然不可读，深底上的文字必须走这一组变量。 */
-  --c-panel: #0e1b2d; /* 仪表盘深底 */
-  --c-panel-raised: #16253c; /* 深底内的卡片 / 读数格 */
-  --c-panel-line: #2b3f5a; /* 深底内分隔线 */
-  --c-panel-text: #eaf1fa; /* 深底主文字（对 --c-panel 约 14:1）*/
-  --c-panel-muted: #a8bcd6; /* 深底次文字（对 --c-panel 约 8:1）*/
-  --c-panel-accent: #8fd0ff; /* 深底数值高亮 */
-  --c-panel-ok: #7fe0b0;
-  --c-panel-warn: #ffc46b;
-  --c-panel-bad: #ff8b82;
-
-  /* ── 颜色 · 浅底仪表刻度（Hero / 图表装饰）────────────────────────── */
-  --c-gauge-line: #cddcf2; /* 浅底上的仪表刻度线 */
-  --c-gauge-line-soft: #e4ecf8; /* 更浅的辅助网格 */
-  --c-gauge-ink: #6b86ad; /* 浅底上的刻度文字 */
-
   /* ── 字体 ────────────────────────────────────────────────────────────── */
   --f-sans: 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC',
     system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -78,13 +40,6 @@
   --r-lg: 18px; /* 大面板 / 图表面板 */
   --r-pill: 999px; /* 胶囊 */
 
-  /* ── 阴影 ────────────────────────────────────────────────────────────── */
-  --shadow-card: 0 1px 2px rgba(28, 34, 46, 0.05), 0 2px 8px rgba(28, 34, 46, 0.05);
-  --shadow-card-hover: 0 2px 4px rgba(28, 34, 46, 0.06),
-    0 12px 28px rgba(11, 61, 145, 0.1);
-  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px rgba(14, 27, 45, 0.18);
-  --shadow-focus: 0 0 0 3px rgba(11, 61, 145, 0.28);
-
   /* ── 动效 ────────────────────────────────────────────────────────────── */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 140ms;
@@ -100,4 +55,273 @@
   --bp-md: 768px;
   --bp-lg: 1024px;
   --bp-xl: 1280px;
+}
+
+/* ============================================================================
+   主题一 · brand（品牌深空，默认）
+   —— 深蓝底 + 顶部紫色光晕 + 右侧青色微光，对齐官网的视觉基调
+   ========================================================================== */
+:root,
+[data-theme='brand'] {
+  color-scheme: dark;
+
+  /* ── 画布 ────────────────────────────────────────────────────────────── */
+  --c-bg: #070c18; /* 页面底色 */
+  --c-bg-grad:
+    radial-gradient(1200px 640px at 76% -10%, rgba(103, 66, 196, 0.4), transparent 62%),
+    radial-gradient(900px 520px at 6% 2%, rgba(22, 84, 178, 0.28), transparent 58%),
+    radial-gradient(700px 420px at 92% 34%, rgba(14, 165, 233, 0.1), transparent 60%),
+    linear-gradient(180deg, #0c1426 0%, #080d1a 46%, #06090f 100%);
+  --c-bg-grad-fixed: fixed;
+
+  /* ── 面层 ────────────────────────────────────────────────────────────── */
+  --c-surface: rgba(255, 255, 255, 0.055); /* 卡片（玻璃） */
+  --c-surface-2: rgba(255, 255, 255, 0.035); /* 次级块 */
+  --c-surface-hover: rgba(255, 255, 255, 0.09); /* 卡片悬停 */
+  --c-elevated: rgba(13, 20, 35, 0.97); /* 浮层（下拉 / 抽屉），不透明以免透出内容 */
+  --c-band: rgba(255, 255, 255, 0.028); /* 区块底（Hero / 页头 / 页脚）*/
+  --c-header-bg: rgba(7, 12, 24, 0.86); /* 吸顶玻璃条 */
+  --c-header-border: rgba(255, 255, 255, 0.1);
+
+  /* ── 文字 ────────────────────────────────────────────────────────────── */
+  --c-text: #e9eefb; /* 正文（对 --c-bg 约 16:1）*/
+  --c-text-soft: #a9b6cf; /* 次级文字（约 9:1）*/
+  --c-text-muted: #7f8da8; /* 弱化文字 / 刻度标签（约 5.5:1）*/
+
+  /* ── 描边 ────────────────────────────────────────────────────────────── */
+  --c-border: rgba(255, 255, 255, 0.11);
+  --c-border-strong: rgba(255, 255, 255, 0.22);
+
+  /* ── 品牌色 ──────────────────────────────────────────────────────────── */
+  --c-primary: #2563eb; /* 填充色（按钮底，配白字约 6:1）*/
+  --c-primary-strong: #1d4ed8; /* 按压态 */
+  --c-primary-text: #7db0ff; /* 主色文字（深底链接 / 图标，约 7:1）*/
+  --c-primary-text-hover: #a9c7ff; /* 主色文字悬停 */
+  --c-primary-soft: rgba(37, 99, 235, 0.2); /* 选中底 */
+  --c-primary-ink: #a9c7ff; /* 主色文字（浅底上，对 --c-primary-soft 约 8:1）*/
+
+  --c-accent: #ff8a4c; /* 强调色 · 橙 */
+  --c-accent-strong: #f97316;
+  --c-accent-soft: rgba(255, 138, 76, 0.16);
+  --c-accent-ink: #ffb083; /* 橙字（浅底上约 7:1）*/
+
+  --c-neutral-soft: rgba(255, 255, 255, 0.08); /* 中性 chip 底 */
+  --c-neutral-ink: #b3c0d6; /* 中性 chip 字 */
+
+  /* ── 状态 ────────────────────────────────────────────────────────────── */
+  --c-ok: #5fd39a;
+  --c-warn: #f5c26b;
+  --c-bad: #ff8b82;
+  --c-info: #7ec8e3;
+  --c-ok-soft: rgba(95, 211, 154, 0.16);
+  --c-warn-soft: rgba(245, 194, 107, 0.16);
+  --c-bad-soft: rgba(255, 139, 130, 0.16);
+  --c-info-soft: rgba(126, 200, 227, 0.16);
+
+  /* ── 仪表盘深底（三种主题下恒为深底，保证读数区始终是"仪表"）────────── */
+  --c-panel: #0d1729;
+  --c-panel-raised: #141f35;
+  --c-panel-line: #26334e;
+  --c-panel-text: #eaf1fa;
+  --c-panel-muted: #a8bcd6;
+  --c-panel-accent: #8fd0ff;
+  --c-panel-ok: #7fe0b0;
+  --c-panel-warn: #ffc46b;
+  --c-panel-bad: #ff8b82;
+
+  /* ── 仪表刻度（画在页面底上，随主题翻转）────────────────────────────── */
+  --c-gauge-line: rgba(255, 255, 255, 0.13);
+  --c-gauge-line-soft: rgba(255, 255, 255, 0.055);
+  --c-gauge-ink: #7d8db0;
+
+  /* ── Hero 装饰（矢量仪表簇）────────────────────────────────────────── */
+  --c-decor-face: rgba(255, 255, 255, 0.04); /* 表盘底 */
+  --c-decor-arc-1: #2f6fd0;
+  --c-decor-arc-2: #7db0ff;
+  --c-decor-readout-bg: rgba(255, 255, 255, 0.05); /* 读数条底 */
+  --c-decor-hub: #1e3a8a; /* 指针轴心 */
+
+  /* ── 大气分层标尺（速查卡）────────────────────────────────────────── */
+  --c-scale-1: rgba(95, 211, 154, 0.18);
+  --c-scale-2: rgba(37, 99, 235, 0.24);
+  --c-scale-3: rgba(37, 99, 235, 0.34);
+  --c-scale-4: rgba(125, 176, 255, 0.3);
+  --c-scale-5: rgba(255, 255, 255, 0.07);
+  --c-scale-ink: #e9eefb;
+
+  /* ── 阴影 ────────────────────────────────────────────────────────────── */
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 8px 22px rgba(0, 0, 0, 0.32);
+  --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.3), 0 18px 40px rgba(0, 0, 0, 0.45);
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-focus: 0 0 0 3px rgba(125, 176, 255, 0.4);
+}
+
+/* ============================================================================
+   主题二 · bright（明朗）
+   —— 冷调浅色，留白多、对比高，适合白天 / 投影 / 打印
+   ========================================================================== */
+[data-theme='bright'] {
+  color-scheme: light;
+
+  --c-bg: #f2f6fd;
+  --c-bg-grad:
+    radial-gradient(1100px 560px at 80% -12%, rgba(99, 102, 241, 0.1), transparent 60%),
+    radial-gradient(760px 420px at 4% 0%, rgba(14, 165, 233, 0.07), transparent 58%),
+    linear-gradient(180deg, #fbfcff 0%, #f2f6fd 55%, #edf2fb 100%);
+  --c-bg-grad-fixed: scroll;
+
+  --c-surface: #ffffff;
+  --c-surface-2: #f4f7fd;
+  --c-surface-hover: #eef2f9;
+  --c-elevated: #ffffff;
+  --c-band: #ffffff;
+  --c-header-bg: rgba(255, 255, 255, 0.9);
+  --c-header-border: #dfe5ee;
+
+  --c-text: #1c222e;
+  --c-text-soft: #4a5567;
+  --c-text-muted: #667085;
+  --c-border: #dfe5ee;
+  --c-border-strong: #c6cedb;
+
+  --c-primary: #0b3d91;
+  --c-primary-strong: #082c6b;
+  --c-primary-text: #0b3d91;
+  --c-primary-text-hover: #082c6b;
+  --c-primary-soft: #e8eff9;
+  --c-primary-ink: #0a2f6e;
+
+  --c-accent: #ff6b35;
+  --c-accent-strong: #e8551f;
+  --c-accent-soft: #fff0e9;
+  --c-accent-ink: #b84615;
+
+  --c-neutral-soft: #eef1f6;
+  --c-neutral-ink: #4a5567;
+
+  --c-ok: #157f4d;
+  --c-warn: #b45309;
+  --c-bad: #c0342b;
+  --c-info: #0b6a8f;
+  --c-ok-soft: #e6f4ec;
+  --c-warn-soft: #fdf1e0;
+  --c-bad-soft: #fbeceb;
+  --c-info-soft: #e4f1f7;
+
+  --c-panel: #0e1b2d;
+  --c-panel-raised: #16253c;
+  --c-panel-line: #2b3f5a;
+  --c-panel-text: #eaf1fa;
+  --c-panel-muted: #a8bcd6;
+  --c-panel-accent: #8fd0ff;
+  --c-panel-ok: #7fe0b0;
+  --c-panel-warn: #ffc46b;
+  --c-panel-bad: #ff8b82;
+
+  --c-gauge-line: #cddcf2;
+  --c-gauge-line-soft: #e6edf9;
+  --c-gauge-ink: #6b86ad;
+
+  --c-decor-face: #ffffff;
+  --c-decor-arc-1: #0b3d91;
+  --c-decor-arc-2: #2f6fd0;
+  --c-decor-readout-bg: #eef3fb;
+  --c-decor-hub: #0b3d91;
+
+  --c-scale-1: #e6f4ec;
+  --c-scale-2: #e8eff9;
+  --c-scale-3: #d3e0f4;
+  --c-scale-4: #b9cdea;
+  --c-scale-5: #eef1f6;
+  --c-scale-ink: #1c222e;
+
+  --shadow-card: 0 1px 2px rgba(28, 34, 46, 0.05), 0 2px 8px rgba(28, 34, 46, 0.05);
+  --shadow-card-hover: 0 2px 4px rgba(28, 34, 46, 0.06), 0 12px 28px rgba(11, 61, 145, 0.1);
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px rgba(14, 27, 45, 0.18);
+  --shadow-focus: 0 0 0 3px rgba(11, 61, 145, 0.28);
+}
+
+/* ============================================================================
+   主题三 · night（夜间护眼）
+   —— 近黑中性底、去掉蓝紫光、正文不用纯白，长时间阅读不刺眼
+   ========================================================================== */
+[data-theme='night'] {
+  color-scheme: dark;
+
+  --c-bg: #0a0c0f;
+  --c-bg-grad:
+    radial-gradient(1000px 520px at 78% -10%, rgba(140, 110, 62, 0.09), transparent 60%),
+    linear-gradient(180deg, #101317 0%, #0a0c0f 55%, #08090b 100%);
+  --c-bg-grad-fixed: fixed;
+
+  --c-surface: #12151a;
+  --c-surface-2: #171a20;
+  --c-surface-hover: #1c2027;
+  --c-elevated: #12151a;
+  --c-band: #101317;
+  --c-header-bg: rgba(10, 12, 15, 0.9);
+  --c-header-border: #21252c;
+
+  --c-text: #c2c6ce; /* 不用纯白，降低眩光（约 11:1）*/
+  --c-text-soft: #959aa4; /* 约 6.8:1 */
+  --c-text-muted: #7d828c; /* 约 4.9:1 */
+
+  --c-border: #21252c;
+  --c-border-strong: #333842;
+
+  --c-primary: #3f5f80; /* 低饱和蓝，配白字约 6:1 */
+  --c-primary-strong: #35506b;
+  --c-primary-text: #8fb0d4; /* 约 7.4:1 */
+  --c-primary-text-hover: #b3cde6;
+  --c-primary-soft: rgba(91, 127, 166, 0.18);
+  --c-primary-ink: #a8c4dd;
+
+  --c-accent: #c98050; /* 降饱和橙，少一分刺眼 */
+  --c-accent-strong: #b06e43;
+  --c-accent-soft: rgba(201, 128, 80, 0.16);
+  --c-accent-ink: #d9a075;
+
+  --c-neutral-soft: #1b1e24;
+  --c-neutral-ink: #9aa0aa;
+
+  --c-ok: #6fae8c;
+  --c-warn: #cbaa72;
+  --c-bad: #d1807a;
+  --c-info: #7ea6b8;
+  --c-ok-soft: rgba(111, 174, 140, 0.16);
+  --c-warn-soft: rgba(203, 170, 114, 0.16);
+  --c-bad-soft: rgba(209, 128, 122, 0.16);
+  --c-info-soft: rgba(126, 166, 184, 0.16);
+
+  --c-panel: #0e1014;
+  --c-panel-raised: #15181d;
+  --c-panel-line: #23272e;
+  --c-panel-text: #ccd1d9;
+  --c-panel-muted: #8b9099;
+  --c-panel-accent: #86b5d4;
+  --c-panel-ok: #79b593;
+  --c-panel-warn: #cbaa72;
+  --c-panel-bad: #d1807a;
+
+  --c-gauge-line: rgba(255, 255, 255, 0.08);
+  --c-gauge-line-soft: rgba(255, 255, 255, 0.035);
+  --c-gauge-ink: #6b7280;
+
+  --c-decor-face: #16191e;
+  --c-decor-arc-1: #456d90;
+  --c-decor-arc-2: #8fb0d4;
+  --c-decor-readout-bg: #171a20;
+  --c-decor-hub: #35506b;
+
+  --c-scale-1: rgba(111, 174, 140, 0.18);
+  --c-scale-2: rgba(63, 95, 128, 0.26);
+  --c-scale-3: rgba(63, 95, 128, 0.36);
+  --c-scale-4: rgba(143, 176, 212, 0.26);
+  --c-scale-5: rgba(255, 255, 255, 0.05);
+  --c-scale-ink: #c2c6ce;
+
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.02) inset, 0 6px 18px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 2px 6px rgba(0, 0, 0, 0.35), 0 14px 32px rgba(0, 0, 0, 0.5);
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-focus: 0 0 0 3px rgba(143, 176, 212, 0.4);
 }

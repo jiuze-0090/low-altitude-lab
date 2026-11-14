@@ -55,11 +55,11 @@ export default function ExperimentPage() {
   return (
     <article className="page-enter">
       {/* 页头 */}
-      <header className="border-b border-hairline bg-surface">
+      <header className="band border-b border-hairline">
         <div className="shell py-7 sm:py-9">
           <Link
             to="/labs"
-            className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-muted transition-colors hover:text-primary"
+            className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-muted transition-colors hover:text-primary-text"
           >
             <ArrowLeft size={13} aria-hidden="true" />
             全部实验室
@@ -114,7 +114,7 @@ export default function ExperimentPage() {
             {/* 原理讲解 */}
             <section className="card mt-8 p-5 sm:p-7" aria-labelledby="principle-heading">
               <div className="flex items-center gap-2">
-                <BookOpen size={15} className="text-primary" aria-hidden="true" />
+                <BookOpen size={15} className="text-primary-text" aria-hidden="true" />
                 <h2 id="principle-heading" className="text-sm font-bold text-ink">
                   原理拆解
                 </h2>

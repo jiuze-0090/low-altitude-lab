@@ -24,7 +24,7 @@ export default function ChapterPage() {
     return (
       <div className="shell py-20 text-center">
         <h1 className="text-2xl font-bold text-ink">章节不存在</h1>
-        <Link to="/principles" className="mt-6 inline-block text-sm font-semibold text-primary hover:underline">
+        <Link to="/principles" className="mt-6 inline-block text-sm font-semibold text-primary-text hover:underline">
           返回原理目录
         </Link>
       </div>
@@ -41,7 +41,7 @@ export default function ChapterPage() {
       <PageHeader eyebrow={`第 ${chapter.order} 章`} title={chapter.title} description={chapter.intro}>
         <Link
           to="/principles"
-          className="mt-5 inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-muted transition-colors hover:text-primary"
+          className="mt-5 inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-muted transition-colors hover:text-primary-text"
         >
           <ArrowLeft size={13} aria-hidden="true" />
           原理目录
@@ -62,7 +62,7 @@ export default function ChapterPage() {
                     to={`/points/${p.id}`}
                     className="card group flex h-full flex-col p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover"
                   >
-                    <h3 className="text-md font-bold text-ink group-hover:text-primary">
+                    <h3 className="text-md font-bold text-ink group-hover:text-primary-text">
                       {p.title}
                     </h3>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
@@ -108,7 +108,7 @@ export default function ChapterPage() {
                 <ArrowLeft size={11} aria-hidden="true" />
                 上一章
               </span>
-              <span className="mt-1 block text-sm font-bold text-ink group-hover:text-primary">
+              <span className="mt-1 block text-sm font-bold text-ink group-hover:text-primary-text">
                 {prev.title}
               </span>
             </Link>
@@ -124,7 +124,7 @@ export default function ChapterPage() {
                 下一章
                 <ArrowRight size={11} aria-hidden="true" />
               </span>
-              <span className="mt-1 block text-sm font-bold text-ink group-hover:text-primary">
+              <span className="mt-1 block text-sm font-bold text-ink group-hover:text-primary-text">
                 {next.title}
               </span>
             </Link>

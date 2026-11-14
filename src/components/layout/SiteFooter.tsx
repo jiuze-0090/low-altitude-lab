@@ -5,7 +5,7 @@ export default function SiteFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-16 border-t border-hairline bg-surface">
+    <footer className="band mt-16 border-t border-hairline">
       <div className="shell py-10">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-sm">
@@ -18,22 +18,22 @@ export default function SiteFooter() {
           <nav aria-label="页脚导航">
             <ul className="grid grid-cols-2 gap-x-10 gap-y-2 text-xs text-ink-soft">
               <li>
-                <Link to="/principles" className="hover:text-primary">
+                <Link to="/principles" className="hover:text-primary-text">
                   原理目录
                 </Link>
               </li>
               <li>
-                <Link to="/labs" className="hover:text-primary">
+                <Link to="/labs" className="hover:text-primary-text">
                   实验室
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-primary">
+                <Link to="/about" className="hover:text-primary-text">
                   关于本站
                 </Link>
               </li>
               <li>
-                <a href="mailto:hello@nbyteair.com" className="hover:text-primary">
+                <a href="mailto:hello@nbyteair.com" className="hover:text-primary-text">
                   联系我们
                 </a>
               </li>
@@ -51,7 +51,7 @@ export default function SiteFooter() {
                 href="https://beian.miit.gov.cn"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary"
+                className="hover:text-primary-text"
               >
                 {siteMeta.icp}
               </a>

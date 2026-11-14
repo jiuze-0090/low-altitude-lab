@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Menu, X, Gauge } from 'lucide-react'
 
+import ThemeSwitcher from '@/components/ui/ThemeSwitcher'
+
 const NAV = [
   { to: '/principles', label: '原理目录' },
   { to: '/labs', label: '实验室' },
@@ -35,10 +37,8 @@ export default function SiteHeader() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-colors duration-200 ${
-        scrolled
-          ? 'border-hairline bg-surface/92 backdrop-blur-md'
-          : 'border-transparent bg-canvas/80 backdrop-blur-sm'
+      className={`glass-bar sticky top-0 z-50 border-b transition-colors duration-200 ${
+        scrolled ? 'border-hairline' : 'border-transparent'
       }`}
       style={{ height: 'var(--header-h)' }}
     >
@@ -73,7 +73,7 @@ export default function SiteHeader() {
                 `rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-primary-soft text-primary-ink'
-                    : 'text-ink-soft hover:bg-white hover:text-ink'
+                    : 'text-ink-soft hover:bg-surface-hover hover:text-ink'
                 }`
               }
             >
@@ -82,22 +82,25 @@ export default function SiteHeader() {
           ))}
         </nav>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="-mr-2 flex h-9 w-9 items-center justify-center rounded-md text-ink-soft transition-colors hover:bg-white hover:text-ink md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? '关闭菜单' : '打开菜单'}
-        >
-          {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeSwitcher />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="-mr-2 flex h-9 w-9 items-center justify-center rounded-md text-ink-soft transition-colors hover:bg-surface-hover hover:text-ink md:hidden"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? '关闭菜单' : '打开菜单'}
+          >
+            {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
+          </button>
+        </div>
       </div>
 
       {open && (
         <nav
           id="mobile-nav"
-          className="border-t border-hairline bg-surface px-4 py-3 md:hidden"
+          className="border-t border-hairline bg-elevated px-4 py-3 md:hidden"
           aria-label="移动端导航"
         >
           <ul className="flex flex-col gap-1">

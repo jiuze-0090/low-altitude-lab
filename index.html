@@ -4,7 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#0B3D91" />
+    <meta name="theme-color" content="#070C18" />
+
+    <!-- 背景主题引导：必须在样式生效前把 data-theme 写到 html 上，避免首屏闪白 -->
+    <script>
+      (function () {
+        var KEY = 'lab-theme'
+        var VALID = { brand: 1, bright: 1, night: 1 }
+        var t = null
+        try {
+          // ?theme=bright|night|brand 可临时指定并记住，便于分享与调试
+          var q = new URLSearchParams(window.location.search).get('theme')
+          if (q && VALID[q]) {
+            t = q
+            window.localStorage.setItem(KEY, q)
+          } else {
+            var saved = window.localStorage.getItem(KEY)
+            if (saved && VALID[saved]) t = saved
+          }
+        } catch (e) {
+          /* 隐私模式读不到就用默认 */
+        }
+        if (!t) t = 'brand'
+        document.documentElement.setAttribute('data-theme', t)
+      })()
+    </script>
+
 
     <title>低空原理实验室</title>
     <meta

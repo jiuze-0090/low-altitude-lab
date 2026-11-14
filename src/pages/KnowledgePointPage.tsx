@@ -23,7 +23,7 @@ export default function KnowledgePointPage() {
     return (
       <div className="shell py-20 text-center">
         <h1 className="text-2xl font-bold text-ink">知识点不存在</h1>
-        <Link to="/principles" className="mt-6 inline-block text-sm font-semibold text-primary hover:underline">
+        <Link to="/principles" className="mt-6 inline-block text-sm font-semibold text-primary-text hover:underline">
           返回原理目录
         </Link>
       </div>
@@ -35,12 +35,12 @@ export default function KnowledgePointPage() {
 
   return (
     <div className="page-enter">
-      <header className="border-b border-hairline bg-surface">
+      <header className="band border-b border-hairline">
         <div className="shell py-8 sm:py-10">
           {chapter && (
             <Link
               to={`/principles/${chapter.id}`}
-              className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-muted transition-colors hover:text-primary"
+              className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-ink-muted transition-colors hover:text-primary-text"
             >
               <ArrowLeft size={13} aria-hidden="true" />
               {chapter.title}

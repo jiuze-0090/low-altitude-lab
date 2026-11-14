@@ -17,7 +17,7 @@ export default function HomePage() {
   return (
     <div className="page-enter">
       {/* Hero — 浅色基调，深蓝只作强调，仪表质感靠线条而非压暗 */}
-      <section className="relative overflow-hidden border-b border-hairline bg-surface">
+      <section className="band relative overflow-hidden border-b border-hairline">
         <GaugeGrid />
         <div className="shell relative grid gap-10 py-12 sm:py-16 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-14">
           <div>
@@ -44,7 +44,7 @@ export default function HomePage() {
               </Link>
               <Link
                 to="/principles"
-                className="inline-flex items-center gap-1.5 rounded-md border border-border-strong bg-surface px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary"
+                className="inline-flex items-center gap-1.5 rounded-md border border-border-strong bg-surface px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary-text"
               >
                 浏览原理目录
               </Link>
@@ -86,7 +86,7 @@ export default function HomePage() {
           </div>
           <Link
             to="/principles"
-            className="shrink-0 text-sm font-semibold text-primary hover:underline"
+            className="shrink-0 text-sm font-semibold text-primary-text hover:underline"
           >
             全部目录
           </Link>
@@ -102,7 +102,7 @@ export default function HomePage() {
                 <span className="tnum text-2xs font-bold text-accent-ink">
                   {String(ch.order).padStart(2, '0')}
                 </span>
-                <h3 className="mt-2 text-md font-bold text-ink group-hover:text-primary">
+                <h3 className="mt-2 text-md font-bold text-ink group-hover:text-primary-text">
                   {ch.title}
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
@@ -116,7 +116,7 @@ export default function HomePage() {
 
       {/* 精选实验 */}
       {featured.length > 0 && (
-        <section className="border-t border-hairline bg-surface">
+        <section className="band border-t border-hairline">
           <div className="shell py-10 sm:py-12">
             <div className="flex items-end justify-between gap-4">
               <div>
@@ -125,7 +125,7 @@ export default function HomePage() {
                   每个实验 3–8 分钟，猜错是正常的
                 </p>
               </div>
-              <Link to="/labs" className="shrink-0 text-sm font-semibold text-primary hover:underline">
+              <Link to="/labs" className="shrink-0 text-sm font-semibold text-primary-text hover:underline">
                 全部 {experiments.length} 个
               </Link>
             </div>
@@ -211,13 +211,13 @@ function ClusterDecor() {
       <svg viewBox="0 0 380 380" className="w-full">
         <defs>
           <linearGradient id="hero-arc" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#0b3d91" />
-            <stop offset="100%" stopColor="#2f6fd0" />
+            <stop offset="0%" stopColor="var(--c-decor-arc-1)" />
+            <stop offset="100%" stopColor="var(--c-decor-arc-2)" />
           </linearGradient>
         </defs>
 
         {/* 外环刻度 */}
-        <circle cx="190" cy="190" r="168" fill="#ffffff" stroke="var(--c-gauge-line)" strokeWidth="1.4" />
+        <circle cx="190" cy="190" r="168" fill="var(--c-decor-face)" stroke="var(--c-gauge-line)" strokeWidth="1.4" />
         <g stroke="var(--c-gauge-line)" strokeWidth="1.6">
           {Array.from({ length: 36 }, (_, i) => {
             const a = (i * 10) * (Math.PI / 180)
@@ -256,16 +256,16 @@ function ClusterDecor() {
 
         {/* 指针 */}
         <g transform="rotate(-38 190 190)">
-          <path d="M 190 190 L 190 74 L 196 92 L 190 104 Z" fill="#ff6b35" />
+          <path d="M 190 190 L 190 74 L 196 92 L 190 104 Z" fill="var(--c-accent)" />
         </g>
-        <circle cx="190" cy="190" r="11" fill="#0b3d91" />
-        <circle cx="190" cy="190" r="4" fill="#ffffff" />
+        <circle cx="190" cy="190" r="11" fill="var(--c-decor-hub)" />
+        <circle cx="190" cy="190" r="4" fill="var(--c-decor-face)" />
 
         {/* 下方读数条 */}
-        <rect x="96" y="286" width="188" height="34" rx="8" fill="#eef3fb" stroke="var(--c-gauge-line)" />
-        <rect x="104" y="294" width="112" height="6" rx="3" fill="#0b3d91" opacity="0.75" />
-        <rect x="104" y="304" width="66" height="6" rx="3" fill="#ff6b35" opacity="0.8" />
-        <text x="272" y="308" textAnchor="end" fontSize="11" fontFamily="monospace" fill="#6b86ad">
+        <rect x="96" y="286" width="188" height="34" rx="8" fill="var(--c-decor-readout-bg)" stroke="var(--c-gauge-line)" />
+        <rect x="104" y="294" width="112" height="6" rx="3" fill="var(--c-primary)" opacity="0.85" />
+        <rect x="104" y="304" width="66" height="6" rx="3" fill="var(--c-accent)" opacity="0.85" />
+        <text x="272" y="308" textAnchor="end" fontSize="11" fontFamily="monospace" fill="var(--c-gauge-ink)">
           ALT 120m
         </text>
       </svg>

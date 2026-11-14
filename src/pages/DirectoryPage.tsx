@@ -37,7 +37,7 @@ export default function DirectoryPage() {
                     </span>
                     <div>
                       <h2 className="text-lg font-bold text-ink">
-                        <Link to={`/principles/${ch.id}`} className="hover:text-primary">
+                        <Link to={`/principles/${ch.id}`} className="hover:text-primary-text">
                           {ch.title}
                         </Link>
                       </h2>
@@ -53,7 +53,7 @@ export default function DirectoryPage() {
 
                   <Link
                     to={`/principles/${ch.id}`}
-                    className="inline-flex shrink-0 items-center gap-1 self-start rounded-md px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary-soft"
+                    className="inline-flex shrink-0 items-center gap-1 self-start rounded-md px-3 py-2 text-sm font-semibold text-primary-text transition-colors hover:bg-primary-soft"
                   >
                     进入章节
                     <ArrowRight size={14} aria-hidden="true" />
@@ -76,7 +76,7 @@ export default function DirectoryPage() {
               </span>
               <div>
                 <h2 className="text-lg font-bold text-ink">
-                  <Link to="/guides" className="hover:text-primary">
+                  <Link to="/guides" className="hover:text-primary-text">
                     规章速查卡
                   </Link>
                 </h2>
@@ -89,7 +89,7 @@ export default function DirectoryPage() {
 
             <Link
               to="/guides"
-              className="inline-flex shrink-0 items-center gap-1 self-start rounded-md px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary-soft"
+              className="inline-flex shrink-0 items-center gap-1 self-start rounded-md px-3 py-2 text-sm font-semibold text-primary-text transition-colors hover:bg-primary-soft"
             >
               打开速查卡
               <ArrowRight size={14} aria-hidden="true" />

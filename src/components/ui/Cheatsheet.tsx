@@ -49,7 +49,7 @@ export default function Cheatsheet({
           <button
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-white hover:text-ink"
+            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-surface-hover hover:text-ink"
           >
             {copied ? <Check size={13} aria-hidden="true" /> : <Copy size={13} aria-hidden="true" />}
             {copied ? '已复制' : '复制'}
@@ -57,7 +57,7 @@ export default function Cheatsheet({
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-white hover:text-ink"
+            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-surface-hover hover:text-ink"
           >
             <Printer size={13} aria-hidden="true" />
             打印

@@ -20,6 +20,8 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* 主题画布层（渐变背景，固定在视口底层） */}
+      <div className="app-canvas" aria-hidden="true" />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"

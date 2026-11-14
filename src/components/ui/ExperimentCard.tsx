@@ -38,14 +38,14 @@ export default function ExperimentCard({
         </span>
       </div>
 
-      <h3 className="mt-3 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-primary">
+      <h3 className="mt-3 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-primary-text">
         {experiment.title}
       </h3>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
         {experiment.hook}
       </p>
 
-      <div className="mt-4 flex items-center gap-1.5 border-t border-hairline pt-3.5 text-sm font-semibold text-primary">
+      <div className="mt-4 flex items-center gap-1.5 border-t border-hairline pt-3.5 text-sm font-semibold text-primary-text">
         先猜一次
         <ArrowRight
           size={14}
