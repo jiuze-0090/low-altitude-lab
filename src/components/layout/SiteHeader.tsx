@@ -5,6 +5,7 @@ import { Menu, X, Gauge } from 'lucide-react'
 const NAV = [
   { to: '/principles', label: '原理目录' },
   { to: '/labs', label: '实验室' },
+  { to: '/guides', label: '速查卡' },
   { to: '/about', label: '关于' },
 ]
 

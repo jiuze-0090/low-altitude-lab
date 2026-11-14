@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, BookOpen } from 'lucide-react'
 
 import { chapters, experiments, siteMeta } from '@/content'
 import PageHeader from '@/components/ui/PageHeader'
@@ -63,6 +63,39 @@ export default function DirectoryPage() {
             )
           })}
         </ol>
+
+        {/* 规章速查卡入口 */}
+        <div className="card mt-6 overflow-hidden">
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:p-6">
+            <div className="flex flex-1 items-start gap-3.5">
+              <span
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-accent-soft text-accent-ink"
+                aria-hidden="true"
+              >
+                <BookOpen size={18} />
+              </span>
+              <div>
+                <h2 className="text-lg font-bold text-ink">
+                  <Link to="/guides" className="hover:text-primary">
+                    规章速查卡
+                  </Link>
+                </h2>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">
+                  空域分类、管制空域四类、无人机适飞与隔离融合空域、飞行高度层基准、申报间隔、气象数字——
+                  不适合做成交互，但必须查得准。每条都标了题库题号。
+                </p>
+              </div>
+            </div>
+
+            <Link
+              to="/guides"
+              className="inline-flex shrink-0 items-center gap-1 self-start rounded-md px-3 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary-soft"
+            >
+              打开速查卡
+              <ArrowRight size={14} aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   )

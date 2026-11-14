@@ -7,6 +7,7 @@ import ChapterPage from '@/pages/ChapterPage'
 import KnowledgePointPage from '@/pages/KnowledgePointPage'
 import LabIndexPage from '@/pages/LabIndexPage'
 import ExperimentPage from '@/pages/ExperimentPage'
+import GuidesPage from '@/pages/GuidesPage'
 import AboutPage from '@/pages/AboutPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
@@ -21,6 +22,7 @@ import NotFoundPage from '@/pages/NotFoundPage'
  *  /points/:pointId        知识点页（原理讲解 + 公式 + 关联实验）
  *  /labs                   实验室列表（全部实验，按章分组）
  *  /labs/:slug             实验室页（预测 → 揭晓 → 归因 → 速查卡）
+ *  /guides                 规章速查卡（空域 / 高度 / 间隔 / 气象数字）
  *  /about                  关于页
  */
 export const routes: RouteObject[] = [
@@ -34,6 +36,7 @@ export const routes: RouteObject[] = [
       { path: 'points/:pointId', element: <KnowledgePointPage /> },
       { path: 'labs', element: <LabIndexPage /> },
       { path: 'labs/:slug', element: <ExperimentPage /> },
+      { path: 'guides', element: <GuidesPage /> },
       { path: 'about', element: <AboutPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],

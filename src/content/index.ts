@@ -3,6 +3,8 @@ import type { Chapter, Experiment, KnowledgePoint, SiteMeta } from '@/types/cont
 import { e1LiftOrigin } from './experiments/e1-lift-origin'
 import { e2SpeedRatio } from './experiments/e2-speed-ratio'
 import { e3AlphaStall } from './experiments/e3-alpha-stall'
+import { m1AltitudeLie } from './experiments/m1-altitude-lie'
+import { m2WindCorrection } from './experiments/m2-wind-correction'
 
 /**
  * 全站内容入口
@@ -50,7 +52,7 @@ export const chapters: Chapter[] = [
     title: '气象与飞行环境',
     intro: '起飞前抬头看的那一眼。题库里占比最大的一章，也是最容易被做成"背定义"的一章。',
     knowledgePointIds: [],
-    experimentIds: [],
+    experimentIds: ['m2-wind-correction', 'm1-altitude-lie'],
   },
   {
     id: 'ch-performance',
@@ -64,7 +66,13 @@ export const chapters: Chapter[] = [
 
 export const knowledgePoints: KnowledgePoint[] = []
 
-export const experiments: Experiment[] = [e1LiftOrigin, e2SpeedRatio, e3AlphaStall]
+export const experiments: Experiment[] = [
+  e1LiftOrigin,
+  e2SpeedRatio,
+  e3AlphaStall,
+  m1AltitudeLie,
+  m2WindCorrection,
+]
 
 /** 反查表 */
 export const experimentById = new Map(experiments.map((e) => [e.id, e]))
