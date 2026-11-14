@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Target, Sprout } from 'lucide-react'
+import { ArrowRight, Target, Sprout, Printer } from 'lucide-react'
 
 import { chapters, experiments, siteMeta } from '@/content'
 import ExperimentCard from '@/components/ui/ExperimentCard'
@@ -16,86 +16,62 @@ export default function HomePage() {
 
   return (
     <div className="page-enter">
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-hairline bg-panel">
-        <svg
-          className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.14]"
-          aria-hidden="true"
-          preserveAspectRatio="none"
-          viewBox="0 0 1200 400"
-        >
-          {Array.from({ length: 26 }, (_, i) => (
-            <line
-              key={i}
-              x1={i * 48}
-              y1="0"
-              x2={i * 48}
-              y2="400"
-              stroke="#8ba8ff"
-              strokeWidth="0.6"
-            />
-          ))}
-          {Array.from({ length: 9 }, (_, i) => (
-            <line
-              key={`h${i}`}
-              x1="0"
-              y1={i * 50}
-              x2="1200"
-              y2={i * 50}
-              stroke="#8ba8ff"
-              strokeWidth="0.6"
-            />
-          ))}
-        </svg>
+      {/* Hero — 浅色基调，深蓝只作强调，仪表质感靠线条而非压暗 */}
+      <section className="relative overflow-hidden border-b border-hairline bg-surface">
+        <GaugeGrid />
+        <div className="shell relative grid gap-10 py-12 sm:py-16 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-14">
+          <div>
+            <p className="text-2xs font-bold uppercase tracking-[0.2em] text-accent-ink">
+              CAAC 理论备考 · 交互式原理
+            </p>
+            <h1 className="mt-3 max-w-2xl text-3xl font-bold leading-tight tracking-tight text-primary-ink sm:text-4xl">
+              先猜错一次，
+              <br />
+              再看懂它为什么错
+            </h1>
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink-soft">
+              这里不讲题，只讲原理。每个实验都从一道预测题开始——你先给答案，
+              再看自己错在哪，最后把这条原理落回你手上那根杆。
+            </p>
 
-        <div className="shell relative py-12 sm:py-16">
-          <p className="text-2xs font-bold uppercase tracking-[0.2em] text-accent">
-            CAAC 理论备考 · 交互式原理
-          </p>
-          <h1 className="mt-3 max-w-2xl text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
-            先猜错一次，
-            <br />
-            再看懂它为什么错
-          </h1>
-          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-[#b8c8de]">
-            这里不讲题，只讲原理。每个实验都从一道预测题开始——你先给答案，
-            再看自己错在哪，最后把这条原理落回你手上那根杆。
-          </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Link
+                to="/labs"
+                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-5 py-3 text-sm font-bold text-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-strong"
+              >
+                进实验室
+                <ArrowRight size={15} aria-hidden="true" />
+              </Link>
+              <Link
+                to="/principles"
+                className="inline-flex items-center gap-1.5 rounded-md border border-border-strong bg-surface px-5 py-3 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary"
+              >
+                浏览原理目录
+              </Link>
+            </div>
 
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            <Link
-              to="/labs"
-              className="inline-flex items-center gap-1.5 rounded-md bg-accent px-5 py-3 text-sm font-bold text-white transition-transform duration-200 hover:-translate-y-0.5"
-            >
-              进实验室
-              <ArrowRight size={15} aria-hidden="true" />
-            </Link>
-            <Link
-              to="/principles"
-              className="inline-flex items-center gap-1.5 rounded-md border border-panel-line px-5 py-3 text-sm font-semibold text-panel-text transition-colors hover:bg-[#16253c]"
-            >
-              浏览原理目录
-            </Link>
+            {/* 三个承诺 */}
+            <dl className="mt-9 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+              <Promise
+                icon={<Target size={14} aria-hidden="true" />}
+                term="先猜后看"
+                desc="做错才看得懂——记忆留存更牢"
+              />
+              <Promise
+                icon={<Sprout size={14} aria-hidden="true" />}
+                term="落到实操"
+                desc="每条原理标出这是你手上哪根杆"
+              />
+              <Promise
+                icon={<Printer size={14} aria-hidden="true" />}
+                term="带走一张卡"
+                desc="实验结束导出 A4 速查卡"
+              />
+            </dl>
           </div>
 
-          {/* 三个承诺 */}
-          <dl className="mt-10 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
-            <Promise
-              icon={<Target size={14} aria-hidden="true" />}
-              term="先猜后看"
-              desc="做错才看得懂——记忆留存更牢"
-            />
-            <Promise
-              icon={<Sprout size={14} aria-hidden="true" />}
-              term="落到实操"
-              desc="每条原理标出这是你手上哪根杆"
-            />
-            <Promise
-              icon={<ArrowRight size={14} aria-hidden="true" />}
-              term="带走一张卡"
-              desc="实验结束导出 A4 速查卡"
-            />
-          </dl>
+          {/* 仪表盘装饰 */}
+          <ClusterDecor />
         </div>
       </section>
 
@@ -168,6 +144,135 @@ export default function HomePage() {
   )
 }
 
+/** 浅底仪表网格背景 */
+function GaugeGrid() {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0 h-full w-full"
+      aria-hidden="true"
+      preserveAspectRatio="none"
+      viewBox="0 0 1200 520"
+    >
+      <g opacity="0.9">
+        {Array.from({ length: 26 }, (_, i) => (
+          <line
+            key={`v${i}`}
+            x1={i * 48}
+            y1="0"
+            x2={i * 48}
+            y2="520"
+            stroke="var(--c-gauge-line-soft)"
+            strokeWidth="1"
+          />
+        ))}
+        {Array.from({ length: 11 }, (_, i) => (
+          <line
+            key={`h${i}`}
+            x1="0"
+            y1={i * 52}
+            x2="1200"
+            y2={i * 52}
+            stroke="var(--c-gauge-line-soft)"
+            strokeWidth="1"
+          />
+        ))}
+      </g>
+      {/* 右上角弧形刻度，增加仪表层次 */}
+      <g stroke="var(--c-gauge-line)" strokeWidth="1.4" fill="none" opacity="0.75">
+        <path d="M 780 520 A 420 420 0 0 1 1200 100" />
+        <path d="M 860 520 A 340 340 0 0 1 1200 180" />
+      </g>
+      <g stroke="var(--c-gauge-line)" strokeWidth="1.4">
+        {Array.from({ length: 11 }, (_, i) => {
+          const a = (-90 + i * 7) * (Math.PI / 180)
+          const r1 = 420
+          const r2 = i % 5 === 0 ? 392 : 405
+          const cx = 780
+          const cy = 520
+          return (
+            <line
+              key={i}
+              x1={cx + r1 * Math.cos(a)}
+              y1={cy + r1 * Math.sin(a)}
+              x2={cx + r2 * Math.cos(a)}
+              y2={cy + r2 * Math.sin(a)}
+            />
+          )
+        })}
+      </g>
+    </svg>
+  )
+}
+
+/** 右侧仪表簇装饰（浅底，纯矢量） */
+function ClusterDecor() {
+  return (
+    <div className="relative hidden lg:block" aria-hidden="true">
+      <svg viewBox="0 0 380 380" className="w-full">
+        <defs>
+          <linearGradient id="hero-arc" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#0b3d91" />
+            <stop offset="100%" stopColor="#2f6fd0" />
+          </linearGradient>
+        </defs>
+
+        {/* 外环刻度 */}
+        <circle cx="190" cy="190" r="168" fill="#ffffff" stroke="var(--c-gauge-line)" strokeWidth="1.4" />
+        <g stroke="var(--c-gauge-line)" strokeWidth="1.6">
+          {Array.from({ length: 36 }, (_, i) => {
+            const a = (i * 10) * (Math.PI / 180)
+            const major = i % 3 === 0
+            const r1 = 168
+            const r2 = major ? 148 : 158
+            return (
+              <line
+                key={i}
+                x1={190 + r1 * Math.cos(a)}
+                y1={190 + r1 * Math.sin(a)}
+                x2={190 + r2 * Math.cos(a)}
+                y2={190 + r2 * Math.sin(a)}
+                stroke={major ? 'var(--c-gauge-ink)' : 'var(--c-gauge-line)'}
+              />
+            )
+          })}
+        </g>
+
+        {/* 主刻度弧 */}
+        <path
+          d="M 60 262 A 150 150 0 1 1 320 262"
+          fill="none"
+          stroke="url(#hero-arc)"
+          strokeWidth="7"
+          strokeLinecap="round"
+        />
+        {/* 副刻度弧 */}
+        <path
+          d="M 96 268 A 112 112 0 1 1 284 268"
+          fill="none"
+          stroke="var(--c-gauge-line)"
+          strokeWidth="5"
+          strokeLinecap="round"
+        />
+
+        {/* 指针 */}
+        <g transform="rotate(-38 190 190)">
+          <path d="M 190 190 L 190 74 L 196 92 L 190 104 Z" fill="#ff6b35" />
+        </g>
+        <circle cx="190" cy="190" r="11" fill="#0b3d91" />
+        <circle cx="190" cy="190" r="4" fill="#ffffff" />
+
+        {/* 下方读数条 */}
+        <rect x="96" y="286" width="188" height="34" rx="8" fill="#eef3fb" stroke="var(--c-gauge-line)" />
+        <rect x="104" y="294" width="112" height="6" rx="3" fill="#0b3d91" opacity="0.75" />
+        <rect x="104" y="304" width="66" height="6" rx="3" fill="#ff6b35" opacity="0.8" />
+        <text x="272" y="308" textAnchor="end" fontSize="11" fontFamily="monospace" fill="#6b86ad">
+          ALT 120m
+        </text>
+      </svg>
+    </div>
+  )
+}
+
 function Promise({
   icon,
   term,
@@ -178,9 +283,9 @@ function Promise({
   desc: string
 }) {
   return (
-    <div className="rounded-md border border-panel-line bg-[#16253c] px-4 py-3">
-      <dt className="flex items-center gap-1.5 text-xs font-bold text-panel-text">
-        <span className="text-accent" aria-hidden="true">
+    <div className="rounded-md border border-hairline bg-surface px-4 py-3 shadow-card">
+      <dt className="flex items-center gap-1.5 text-xs font-bold text-ink">
+        <span className="text-accent-ink" aria-hidden="true">
           {icon}
         </span>
         {term}

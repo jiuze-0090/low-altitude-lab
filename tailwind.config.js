@@ -18,7 +18,25 @@ export default {
         },
         canvas: 'var(--c-bg)',
         surface: 'var(--c-surface)',
-        panel: 'var(--c-panel)',
+        // 仪表盘深底色阶 —— 深底上的文字/描边必须走这一组，
+        // 直接用 ink.* 压在深底上对比度不足。
+        panel: {
+          DEFAULT: 'var(--c-panel)',
+          raised: 'var(--c-panel-raised)',
+          line: 'var(--c-panel-line)',
+          text: 'var(--c-panel-text)',
+          muted: 'var(--c-panel-muted)',
+          accent: 'var(--c-panel-accent)',
+          ok: 'var(--c-panel-ok)',
+          warn: 'var(--c-panel-warn)',
+          bad: 'var(--c-panel-bad)',
+        },
+        // 浅底上的仪表刻度（Hero 装饰、图表网格）
+        gauge: {
+          line: 'var(--c-gauge-line)',
+          soft: 'var(--c-gauge-line-soft)',
+          ink: 'var(--c-gauge-ink)',
+        },
         ink: {
           DEFAULT: 'var(--c-text)',
           soft: 'var(--c-text-soft)',

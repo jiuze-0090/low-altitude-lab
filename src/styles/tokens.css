@@ -15,18 +15,15 @@
   --c-primary-ink: #0a2f6e; /* 主色文字（浅底上的可读色） */
   --c-accent: #ff6b35; /* 强调色 · 橙（告警/关键读数） */
   --c-accent-soft: #fff0e9; /* 强调色浅底 */
-  --c-accent-ink: #c14a17; /* 强调色文字（浅底上的可读色） */
+  --c-accent-ink: #b84615; /* 强调色文字（浅底上的可读色，对 --c-accent-soft 达 4.8:1）*/
 
   /* ── 颜色 · 中性 ─────────────────────────────────────────────────────── */
   --c-bg: #f7f9fc; /* 页面背景 */
   --c-surface: #ffffff; /* 卡片 / 面板底 */
-  --c-panel: #0e1b2d; /* 仪表盘深底（读数区、反白展示区） */
-  --c-panel-line: #24374f; /* 仪表盘内分隔线 */
-  --c-panel-text: #dbe6f3; /* 仪表盘内文字 */
 
   --c-text: #1c222e; /* 正文 */
   --c-text-soft: #4a5567; /* 次级文字 */
-  --c-text-muted: #78829a; /* 弱化文字 / 刻度标签 */
+  --c-text-muted: #667085; /* 弱化文字 / 刻度标签（对 --c-bg 达 4.6:1）*/
   --c-border: #dfe5ee; /* 描边 */
   --c-border-strong: #c6cedb; /* 强调描边 */
 
@@ -38,6 +35,23 @@
   --c-ok-soft: #e6f4ec;
   --c-warn-soft: #fdf1e0;
   --c-bad-soft: #fbeceb;
+
+  /* ── 颜色 · 仪表盘深底（仅用于读数区/交互画布）─────────────────────────
+     浅底正文色压深底必然不可读，深底上的文字必须走这一组变量。 */
+  --c-panel: #0e1b2d; /* 仪表盘深底 */
+  --c-panel-raised: #16253c; /* 深底内的卡片 / 读数格 */
+  --c-panel-line: #2b3f5a; /* 深底内分隔线 */
+  --c-panel-text: #eaf1fa; /* 深底主文字（对 --c-panel 约 14:1）*/
+  --c-panel-muted: #a8bcd6; /* 深底次文字（对 --c-panel 约 8:1）*/
+  --c-panel-accent: #8fd0ff; /* 深底数值高亮 */
+  --c-panel-ok: #7fe0b0;
+  --c-panel-warn: #ffc46b;
+  --c-panel-bad: #ff8b82;
+
+  /* ── 颜色 · 浅底仪表刻度（Hero / 图表装饰）────────────────────────── */
+  --c-gauge-line: #cddcf2; /* 浅底上的仪表刻度线 */
+  --c-gauge-line-soft: #e4ecf8; /* 更浅的辅助网格 */
+  --c-gauge-ink: #6b86ad; /* 浅底上的刻度文字 */
 
   /* ── 字体 ────────────────────────────────────────────────────────────── */
   --f-sans: 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', 'Noto Sans SC',

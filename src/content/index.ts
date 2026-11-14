@@ -1,6 +1,8 @@
 import type { Chapter, Experiment, KnowledgePoint, SiteMeta } from '@/types/content'
 
 import { e1LiftOrigin } from './experiments/e1-lift-origin'
+import { e2SpeedRatio } from './experiments/e2-speed-ratio'
+import { e3AlphaStall } from './experiments/e3-alpha-stall'
 
 /**
  * 全站内容入口
@@ -24,7 +26,7 @@ export const chapters: Chapter[] = [
     title: '气动与飞行原理',
     intro: '空气为什么能托住飞机，飞行器为什么能操纵。这是最核心、也最该动手拧参数的一章。',
     knowledgePointIds: [],
-    experimentIds: ['e1-lift-origin'],
+    experimentIds: ['e1-lift-origin', 'e2-speed-ratio', 'e3-alpha-stall'],
   },
   {
     id: 'ch-stability',
@@ -62,7 +64,7 @@ export const chapters: Chapter[] = [
 
 export const knowledgePoints: KnowledgePoint[] = []
 
-export const experiments: Experiment[] = [e1LiftOrigin]
+export const experiments: Experiment[] = [e1LiftOrigin, e2SpeedRatio, e3AlphaStall]
 
 /** 反查表 */
 export const experimentById = new Map(experiments.map((e) => [e.id, e]))

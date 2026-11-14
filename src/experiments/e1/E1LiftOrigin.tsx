@@ -206,22 +206,21 @@ export default function E1LiftOrigin({ values }: { values: Record<string, number
               流动分离 · 升力下降
             </text>
           </g>
-        )}
-      </svg>
+        )}      </svg>
 
       {/* 公式条 */}
-      <div className="flex flex-col gap-1.5 rounded-md bg-[#16253c] px-4 py-3 font-mono text-xs text-panel-text">
+      <div className="flex flex-col gap-1.5 rounded-md bg-panel-raised px-4 py-3 font-mono text-xs text-panel-text">
         <p>
-          <span className="text-ink-muted">动压</span> q = ½ρV² ={' '}
-          <span className="text-[#8fd0ff]">{(0.5 * RHO * v * v).toFixed(0)}</span> Pa
+          <span className="text-panel-muted">动压</span> q = ½ρV² ={' '}
+          <span className="text-panel-accent">{(0.5 * RHO * v * v).toFixed(0)}</span> Pa
         </p>
         <p>
-          <span className="text-ink-muted">升力</span> L = C<sub>L</sub>·q·S ={' '}
-          <span className="text-[#8fd0ff]">{lift.toFixed(0)}</span> N
-          <span className="ml-2 text-ink-muted">C<sub>L</sub> = {cl.toFixed(3)}</span>
+          <span className="text-panel-muted">升力</span> L = C<sub>L</sub>·q·S ={' '}
+          <span className="text-panel-accent">{lift.toFixed(0)}</span> N
+          <span className="ml-2 text-panel-muted">C<sub>L</sub> = {cl.toFixed(3)}</span>
         </p>
         <p>
-          <span className="text-ink-muted">伯努利</span> p + ½ρv² = const ⇒ 上表面 v↑ → p↓
+          <span className="text-panel-muted">伯努利</span> p + ½ρv² = const ⇒ 上表面 v↑ → p↓
         </p>
       </div>
     </div>
@@ -241,17 +240,17 @@ function Readout({
 }) {
   const color =
     tone === 'bad'
-      ? 'text-[#ff8b82]'
+      ? 'text-panel-bad'
       : tone === 'info'
-        ? 'text-[#8fd0ff]'
-        : 'text-[#7fe0b0]'
+        ? 'text-panel-accent'
+        : 'text-panel-ok'
 
   return (
-    <div className="rounded-md border border-panel-line bg-[#16253c] px-3 py-2">
-      <p className="text-2xs uppercase tracking-wider text-ink-muted">{label}</p>
+    <div className="rounded-md border border-panel-line bg-panel-raised px-3 py-2">
+      <p className="text-2xs uppercase tracking-wider text-panel-muted">{label}</p>
       <p className={`tnum mt-0.5 text-lg font-bold leading-none ${color}`}>
         {value}
-        {unit && <span className="ml-1 text-2xs font-normal text-ink-muted">{unit}</span>}
+        {unit && <span className="ml-1 text-2xs font-normal text-panel-muted">{unit}</span>}
       </p>
     </div>
   )
