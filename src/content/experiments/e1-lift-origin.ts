@@ -15,7 +15,11 @@ export const e1LiftOrigin: Experiment = {
   title: '升力到底从哪来',
   hook: '为什么空气上下不一样快就能把飞机托起来？先猜一个你最熟悉的说法。',
   chapterId: 'ch-aero',
-  knowledgePointIds: [],
+  knowledgePointIds: [
+    'kp-lift-equation',
+    'kp-bernoulli-scope',
+    'kp-lift-direction',
+  ],
   component: 'e1-lift-origin',
   minutes: 6,
 

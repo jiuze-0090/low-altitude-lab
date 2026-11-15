@@ -6,6 +6,12 @@ import { e3AlphaStall } from './experiments/e3-alpha-stall'
 import { m1AltitudeLie } from './experiments/m1-altitude-lie'
 import { m2WindCorrection } from './experiments/m2-wind-correction'
 
+import { aeroPoints } from './knowledge-points/aero'
+import { stabilityPoints } from './knowledge-points/stability'
+import { multirotorPoints } from './knowledge-points/multirotor'
+import { envPoints } from './knowledge-points/env'
+import { performancePoints } from './knowledge-points/performance'
+
 /**
  * 全站内容入口
  * ---------------------------------------------------------------------------
@@ -28,7 +34,18 @@ export const chapters: Chapter[] = [
     order: 1,
     title: '气动与飞行原理',
     intro: '空气为什么能托住飞机，飞行器为什么能操纵。这是最核心、也最该动手拧参数的一章。',
-    knowledgePointIds: [],
+    knowledgePointIds: [
+      'kp-lift-equation',
+      'kp-bernoulli-scope',
+      'kp-lift-direction',
+      'kp-drag-power',
+      'kp-lift-drag-ratio',
+      'kp-drag-decomposition',
+      'kp-alpha-definition',
+      'kp-critical-alpha-stall',
+      'kp-stall-recovery',
+      'kp-ice-contamination',
+    ],
     experimentIds: ['e1-lift-origin', 'e2-speed-ratio', 'e3-alpha-stall'],
   },
   {
@@ -36,7 +53,7 @@ export const chapters: Chapter[] = [
     order: 2,
     title: '重量·平衡·安定性',
     intro: '力要平衡，飞机才不乱转。重心前移一寸，手上的杆量就变一个量级。',
-    knowledgePointIds: [],
+    knowledgePointIds: ['kp-weight-balance', 'kp-static-stability'],
     experimentIds: [],
   },
   {
@@ -44,7 +61,7 @@ export const chapters: Chapter[] = [
     order: 3,
     title: '多旋翼与动力系统',
     intro: '四个电机怎么配合出前进、后退和偏航。桨的反扭矩是最反直觉的一节。',
-    knowledgePointIds: [],
+    knowledgePointIds: ['kp-multirotor-torque', 'kp-multirotor-prop-forces'],
     experimentIds: [],
   },
   {
@@ -52,7 +69,15 @@ export const chapters: Chapter[] = [
     order: 4,
     title: '气象与飞行环境',
     intro: '起飞前抬头看的那一眼。题库里占比最大的一章，也是最容易被做成"背定义"的一章。',
-    knowledgePointIds: [],
+    knowledgePointIds: [
+      'kp-pressure-altitude',
+      'kp-density-altitude',
+      'kp-standard-atmosphere',
+      'kp-wind-vector',
+      'kp-wind-direction',
+      'kp-crosswind-correction',
+      'kp-wind-performance',
+    ],
     experimentIds: ['m2-wind-correction', 'm1-altitude-lie'],
   },
   {
@@ -60,12 +85,19 @@ export const chapters: Chapter[] = [
     order: 5,
     title: '飞行性能与航迹',
     intro: '爬升有多快、航程能多远、失速速度是多少。把数字和手感对上。',
-    knowledgePointIds: [],
+    knowledgePointIds: ['kp-climb-performance', 'kp-glide-range'],
     experimentIds: [],
   },
 ]
 
-export const knowledgePoints: KnowledgePoint[] = []
+/** 知识点（按章节顺序排列，前后篇导航依此串读）*/
+export const knowledgePoints: KnowledgePoint[] = [
+  ...aeroPoints,
+  ...stabilityPoints,
+  ...multirotorPoints,
+  ...envPoints,
+  ...performancePoints,
+]
 
 export const experiments: Experiment[] = [
   e1LiftOrigin,

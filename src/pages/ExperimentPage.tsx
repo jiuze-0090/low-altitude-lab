@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, BookOpen, Target } from 'lucide-react'
+import { ArrowLeft, BookOpen, Lightbulb, Target } from 'lucide-react'
 
-import { experiments, experimentBySlug, chapterById, siteMeta } from '@/content'
+import { experiments, experimentBySlug, chapterById, knowledgePointById, siteMeta } from '@/content'
 import PredictionBlock from '@/components/experiment/PredictionBlock'
 import Cheatsheet from '@/components/ui/Cheatsheet'
 import Markdown from '@/components/formula/Markdown'
@@ -51,6 +51,9 @@ export default function ExperimentPage() {
 
   const chapter = chapterById.get(experiment.chapterId)
   const Canvas = getExperimentComponent(experiment.component)
+  const relatedPoints = experiment.knowledgePointIds
+    .map((id) => knowledgePointById.get(id))
+    .filter((p) => p !== undefined)
 
   return (
     <article className="page-enter">
@@ -158,6 +161,35 @@ export default function ExperimentPage() {
                         {ref.code}
                       </span>
                       {ref.gist}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {relatedPoints.length > 0 && (
+              <section className="card p-5" aria-labelledby="related-heading">
+                <div className="flex items-center gap-2">
+                  <Lightbulb size={14} className="text-primary-text" aria-hidden="true" />
+                  <h2 id="related-heading" className="text-sm font-bold text-ink">
+                    相关知识点
+                  </h2>
+                </div>
+                <ul className="mt-3 flex flex-col gap-3">
+                  {relatedPoints.map((p) => (
+                    <li key={p.id}>
+                      <Link
+                        to={`/points/${p.id}`}
+                        className="group block transition-colors"
+                        aria-label={`知识点：${p.title}`}
+                      >
+                        <span className="block text-xs font-semibold text-ink group-hover:text-primary-text">
+                          {p.title}
+                        </span>
+                        <span className="mt-0.5 block text-2xs leading-relaxed text-ink-muted">
+                          {p.summary}
+                        </span>
+                      </Link>
                     </li>
                   ))}
                 </ul>

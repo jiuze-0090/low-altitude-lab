@@ -22,7 +22,12 @@ export const m2WindCorrection: Experiment = {
   title: '侧风修正：把风三角算明白',
   hook: '风从右边来，机头该偏多少度？很多人把「修正角」和「漂移角」算混了。',
   chapterId: 'ch-env',
-  knowledgePointIds: [],
+  knowledgePointIds: [
+    'kp-wind-vector',
+    'kp-wind-direction',
+    'kp-crosswind-correction',
+    'kp-wind-performance',
+  ],
   component: 'm2-wind-correction',
   minutes: 8,
 

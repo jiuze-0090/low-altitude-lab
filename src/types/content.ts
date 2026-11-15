@@ -95,6 +95,8 @@ export interface KnowledgePoint {
   formulas?: string[]
   /** 高频考法 */
   examAngles?: string[]
+  /** 这在你手上是哪根杆：把原理落回学员的操作动作 */
+  onYourStick?: string
 }
 
 /** 章节 */

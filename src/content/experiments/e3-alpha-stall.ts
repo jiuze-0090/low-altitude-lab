@@ -25,7 +25,12 @@ export const e3AlphaStall: Experiment = {
   title: '迎角越大，升力越大？',
   hook: '抬头抬到某个角度，升力会突然崩掉。这不是玄学，是气流从机翼上"跑掉"了。',
   chapterId: 'ch-aero',
-  knowledgePointIds: [],
+  knowledgePointIds: [
+    'kp-alpha-definition',
+    'kp-critical-alpha-stall',
+    'kp-stall-recovery',
+    'kp-ice-contamination',
+  ],
   component: 'e3-alpha-stall',
   minutes: 9,
 

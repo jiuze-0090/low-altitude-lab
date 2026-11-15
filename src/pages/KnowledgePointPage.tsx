@@ -1,8 +1,8 @@
 import { Suspense, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, FlaskConical } from 'lucide-react'
+import { ArrowLeft, ArrowRight, FlaskConical, Hand } from 'lucide-react'
 
-import { knowledgePointById, experimentById, chapterById, siteMeta } from '@/content'
+import { knowledgePointById, knowledgePoints, experimentById, chapterById, siteMeta } from '@/content'
 import Markdown, { Formula } from '@/components/formula/Markdown'
 
 export default function KnowledgePointPage() {
@@ -32,6 +32,12 @@ export default function KnowledgePointPage() {
 
   const chapter = chapterById.get(point.chapterId)
   const exp = point.experimentId ? experimentById.get(point.experimentId) : undefined
+
+  // 前后篇：按 knowledgePoints 的数组顺序（即章节顺序）串读
+  const order = knowledgePoints.map((p) => p.id)
+  const idx = order.indexOf(point.id)
+  const prev = idx > 0 ? knowledgePointById.get(order[idx - 1]) : undefined
+  const next = idx >= 0 && idx < order.length - 1 ? knowledgePointById.get(order[idx + 1]) : undefined
 
   return (
     <div className="page-enter">
@@ -98,6 +104,55 @@ export default function KnowledgePointPage() {
                   ))}
                 </ul>
               </section>
+            )}
+
+            {point.onYourStick && (
+              <section className="mt-8" aria-labelledby="stick-heading">
+                <h2 id="stick-heading" className="text-sm font-bold text-ink">
+                  这在你手上是哪根杆
+                </h2>
+                <div className="mt-2.5 rounded-lg border border-hairline bg-accent-soft px-4 py-3.5">
+                  <p className="flex gap-2.5 text-sm leading-relaxed text-ink">
+                    <Hand size={15} className="mt-0.5 shrink-0 text-accent-ink" aria-hidden="true" />
+                    <span>{point.onYourStick}</span>
+                  </p>
+                </div>
+              </section>
+            )}
+
+            {(prev || next) && (
+              <nav
+                className="mt-10 grid grid-cols-1 gap-3 border-t border-hairline pt-6 sm:grid-cols-2"
+                aria-label="知识点翻页"
+              >
+                {prev ? (
+                  <Link to={`/points/${prev.id}`} className="card group p-4 transition-colors hover:border-border-strong">
+                    <span className="flex items-center gap-1 text-2xs text-ink-muted">
+                      <ArrowLeft size={11} aria-hidden="true" />
+                      上一条
+                    </span>
+                    <span className="mt-1 block text-sm font-bold text-ink group-hover:text-primary-text">
+                      {prev.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <span />
+                )}
+                {next && (
+                  <Link
+                    to={`/points/${next.id}`}
+                    className="card group p-4 text-right transition-colors hover:border-border-strong"
+                  >
+                    <span className="flex items-center justify-end gap-1 text-2xs text-ink-muted">
+                      下一条
+                      <ArrowRight size={11} aria-hidden="true" />
+                    </span>
+                    <span className="mt-1 block text-sm font-bold text-ink group-hover:text-primary-text">
+                      {next.title}
+                    </span>
+                  </Link>
+                )}
+              </nav>
             )}
           </div>
 

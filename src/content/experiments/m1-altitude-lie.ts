@@ -24,7 +24,11 @@ export const m1AltitudeLie: Experiment = {
   title: '高度表在骗你',
   hook: '气压高度表永远只说「标准大气里气压等于这个数的高度」。它不知道你脚下的大气长什么样。',
   chapterId: 'ch-env',
-  knowledgePointIds: [],
+  knowledgePointIds: [
+    'kp-pressure-altitude',
+    'kp-density-altitude',
+    'kp-standard-atmosphere',
+  ],
   component: 'm1-altitude-lie',
   minutes: 9,
 

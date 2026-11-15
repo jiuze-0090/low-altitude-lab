@@ -20,7 +20,11 @@ export const e2SpeedRatio: Experiment = {
   title: '速度翻倍，阻力翻几倍',
   hook: '同样迎角，空速从 10 提到 20，阻力会变成几倍？升阻比又在哪一步开始变差？',
   chapterId: 'ch-aero',
-  knowledgePointIds: [],
+  knowledgePointIds: [
+    'kp-drag-power',
+    'kp-lift-drag-ratio',
+    'kp-drag-decomposition',
+  ],
   component: 'e2-speed-ratio',
   minutes: 8,
 
