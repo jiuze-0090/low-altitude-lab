@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 import PageHeader from '@/components/ui/PageHeader'
 import {
@@ -55,7 +56,22 @@ export default function GuidesPage() {
         eyebrow="速查"
         title="规章速查卡"
         description="这一章的知识点是「背下来的」而不是「算出来的」，硬做成可调参数一定会失真。所以它做成一页可打印的速查表——每一条都标了题库题号，方便回溯核对。"
-      />
+      >
+        <div className="mt-5 flex flex-wrap gap-1.5">
+          <Link
+            to="/cheatsheets"
+            className="rounded-md border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-primary hover:text-primary-text"
+          >
+            原理速查卡（气动 / 稳定性 / 性能 / 公式）→
+          </Link>
+          <Link
+            to="/exam"
+            className="rounded-md border border-hairline bg-surface px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-primary hover:text-primary-text"
+          >
+            考点索引（按题号检索）→
+          </Link>
+        </div>
+      </PageHeader>
 
       {/* 锚点导航 */}
       <nav

@@ -7,7 +7,10 @@ import ThemeSwitcher from '@/components/ui/ThemeSwitcher'
 const NAV = [
   { to: '/principles', label: '原理目录' },
   { to: '/labs', label: '实验室' },
-  { to: '/guides', label: '速查卡' },
+  { to: '/guides', label: '速查' },
+  { to: '/cheatsheets', label: '原理卡' },
+  { to: '/exam', label: '考点' },
+  { to: '/tools', label: '工具' },
   { to: '/about', label: '关于' },
 ]
 

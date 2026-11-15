@@ -3,13 +3,14 @@ import type { KnowledgePoint } from '@/types/content'
 /**
  * 知识点 · 第三章 多旋翼与动力系统
  * ---------------------------------------------------------------------------
- * 本章暂无交互实验（实验待补，见 P0-2），题号待实验落地后回填。
+ * 对应实验：E6 多旋翼反扭矩与偏航（e6-multirotor-yaw）。
  */
 export const multirotorPoints: KnowledgePoint[] = [
   {
     id: 'kp-multirotor-torque',
     title: '反扭矩：四个电机怎么配合出偏航',
     chapterId: 'ch-multirotor',
+    experimentId: 'e6-multirotor-yaw',
     summary:
       '桨加速会把机身往反方向拧。想要偏航，就得让两组对角电机的转速**不一样**——而不是让机身自己转过去。',
     body: String.raw`
@@ -73,6 +74,7 @@ $$T \propto \rho\, n^2 D^4, \qquad Q \propto \rho\, n^2 D^5$$
     id: 'kp-multirotor-prop-forces',
     title: '桨的受力与前飞效率：为什么顺风前飞省电',
     chapterId: 'ch-multirotor',
+    experimentId: 'e6-multirotor-yaw',
     summary:
       '桨的推力和反扭矩都由转速的平方决定。减小桨盘载荷、用前进速度代替垂直升高，是多旋翼省电的两个主要途径。',
     body: String.raw`

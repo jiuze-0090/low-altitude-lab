@@ -3,13 +3,14 @@ import type { KnowledgePoint } from '@/types/content'
 /**
  * 知识点 · 第五章 飞行性能与航迹
  * ---------------------------------------------------------------------------
- * 本章暂无交互实验（实验待补，见 P0-2），题号待实验落地后回填。
+ * 对应实验：E7 爬升率与航迹（e7-climb-performance）。
  */
 export const performancePoints: KnowledgePoint[] = [
   {
     id: 'kp-climb-performance',
     title: '爬升率：剩余推力减去诱导阻力',
     chapterId: 'ch-performance',
+    experimentId: 'e7-climb-performance',
     summary:
       '爬升率 = 剩余推力 ÷ 重量。高度越高、载重越大、迎角越大，爬升率越小——高原上"爬不动"是物理必然。',
     body: String.raw`
@@ -60,6 +61,7 @@ $$\rho \downarrow \Rightarrow T \downarrow \Rightarrow R_{\text{可用}} \downar
     id: 'kp-glide-range',
     title: '滑翔与航程：最大航程在最大升阻比处',
     chapterId: 'ch-performance',
+    experimentId: 'e7-climb-performance',
     summary:
       '航程取决于升阻比和风。最大航程在最大升阻比状态取得，此时速度比最小速度略大、比最小速度小得多。',
     body: String.raw`

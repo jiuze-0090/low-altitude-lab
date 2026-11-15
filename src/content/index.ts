@@ -3,6 +3,10 @@ import type { Chapter, Experiment, KnowledgePoint, SiteMeta } from '@/types/cont
 import { e1LiftOrigin } from './experiments/e1-lift-origin'
 import { e2SpeedRatio } from './experiments/e2-speed-ratio'
 import { e3AlphaStall } from './experiments/e3-alpha-stall'
+import { e4CgStability } from './experiments/e4-cg-stability'
+import { e5ControlSurfaces } from './experiments/e5-control-surfaces'
+import { e6MultirotorYaw } from './experiments/e6-multirotor-yaw'
+import { e7ClimbPerformance } from './experiments/e7-climb-performance'
 import { m1AltitudeLie } from './experiments/m1-altitude-lie'
 import { m2WindCorrection } from './experiments/m2-wind-correction'
 
@@ -53,8 +57,13 @@ export const chapters: Chapter[] = [
     order: 2,
     title: '重量·平衡·安定性',
     intro: '力要平衡，飞机才不乱转。重心前移一寸，手上的杆量就变一个量级。',
-    knowledgePointIds: ['kp-weight-balance', 'kp-static-stability'],
-    experimentIds: [],
+    knowledgePointIds: [
+      'kp-weight-balance',
+      'kp-static-stability',
+      'kp-control-surfaces',
+      'kp-trim-and-balance',
+    ],
+    experimentIds: ['e4-cg-stability', 'e5-control-surfaces'],
   },
   {
     id: 'ch-multirotor',
@@ -62,7 +71,7 @@ export const chapters: Chapter[] = [
     title: '多旋翼与动力系统',
     intro: '四个电机怎么配合出前进、后退和偏航。桨的反扭矩是最反直觉的一节。',
     knowledgePointIds: ['kp-multirotor-torque', 'kp-multirotor-prop-forces'],
-    experimentIds: [],
+    experimentIds: ['e6-multirotor-yaw'],
   },
   {
     id: 'ch-env',
@@ -86,7 +95,7 @@ export const chapters: Chapter[] = [
     title: '飞行性能与航迹',
     intro: '爬升有多快、航程能多远、失速速度是多少。把数字和手感对上。',
     knowledgePointIds: ['kp-climb-performance', 'kp-glide-range'],
-    experimentIds: [],
+    experimentIds: ['e7-climb-performance'],
   },
 ]
 
@@ -103,6 +112,10 @@ export const experiments: Experiment[] = [
   e1LiftOrigin,
   e2SpeedRatio,
   e3AlphaStall,
+  e4CgStability,
+  e5ControlSurfaces,
+  e6MultirotorYaw,
+  e7ClimbPerformance,
   m1AltitudeLie,
   m2WindCorrection,
 ]

@@ -130,7 +130,7 @@ export default function HomePage() {
               <div>
                 <h2 className="text-xl font-bold text-ink">先试一个</h2>
                 <p className="mt-1.5 text-sm text-ink-soft">
-                  每个实验 3–8 分钟，猜错是正常的
+                  每个实验 3–11 分钟，猜错是正常的
                 </p>
               </div>
               <Link to="/labs" className="shrink-0 text-sm font-semibold text-primary-text hover:underline">
