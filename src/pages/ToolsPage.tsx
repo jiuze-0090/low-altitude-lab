@@ -36,7 +36,10 @@ function densityAltitude(rho: number) {
     if (isaDensity(mid) > rho) lo = mid
     else hi = mid
   }
-  return (lo + hi) / 2
+  // 二分收敛后 lo/hi 会落在 0 两侧，差之毫厘即为 -0.5 m 级别；
+  // 海平面标准密度时结果应为 0，归一化掉负零避免出现「-0m」。
+  const h = (lo + hi) / 2
+  return Math.abs(h) < 0.5 ? 0 : h
 }
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v))
