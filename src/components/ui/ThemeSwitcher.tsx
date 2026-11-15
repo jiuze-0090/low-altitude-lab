@@ -24,7 +24,7 @@ export const THEMES: {
     id: 'brand',
     label: '品牌深空',
     desc: '深蓝紫光晕，与官网同源',
-    swatch: ['#0c1426', '#5b42c4', '#7db0ff'],
+    swatch: ['#1b2d58', '#845aee', '#8cbcff'],
   },
   {
     id: 'bright',
@@ -50,7 +50,7 @@ export function applyTheme(id: ThemeId) {
   document.documentElement.setAttribute('data-theme', id)
   const meta = document.querySelector('meta[name="theme-color"]')
   if (meta) {
-    meta.setAttribute('content', id === 'bright' ? '#f2f6fd' : id === 'night' ? '#0a0c0f' : '#070c18')
+    meta.setAttribute('content', id === 'bright' ? '#f2f6fd' : id === 'night' ? '#0a0c0f' : '#0c1a38')
   }
 }
 
