@@ -14,6 +14,15 @@ export default function HomePage() {
 
   const featured = useMemo(() => experiments.slice(0, 4), [experiments])
 
+  /** 时长范围从实验数据实时取，避免文案与实际耗时脱节 */
+  const durationLabel = useMemo(() => {
+    const mins = experiments.map((e) => e.minutes)
+    if (mins.length === 0) return ''
+    const lo = Math.min(...mins)
+    const hi = Math.max(...mins)
+    return lo === hi ? `${lo} 分钟` : `${lo}–${hi} 分钟`
+  }, [experiments])
+
   return (
     <div className="page-enter">
       {/* Hero — 浅色基调，深蓝只作强调，仪表质感靠线条而非压暗 */}
@@ -130,7 +139,7 @@ export default function HomePage() {
               <div>
                 <h2 className="text-xl font-bold text-ink">先试一个</h2>
                 <p className="mt-1.5 text-sm text-ink-soft">
-                  每个实验 3–11 分钟，猜错是正常的
+                  每个实验 {durationLabel}，猜错是正常的
                 </p>
               </div>
               <Link to="/labs" className="shrink-0 text-sm font-semibold text-primary-text hover:underline">

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { ExternalLink } from 'lucide-react'
 import { siteMeta } from '@/content'
 
 export default function SiteFooter() {
@@ -28,6 +29,21 @@ export default function SiteFooter() {
                 </Link>
               </li>
               <li>
+                <Link to="/cheatsheets" className="hover:text-primary-text">
+                  原理速查卡
+                </Link>
+              </li>
+              <li>
+                <Link to="/exam" className="hover:text-primary-text">
+                  考点索引
+                </Link>
+              </li>
+              <li>
+                <Link to="/tools" className="hover:text-primary-text">
+                  高频计算器
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="hover:text-primary-text">
                   关于本站
                 </Link>
@@ -35,6 +51,17 @@ export default function SiteFooter() {
               <li>
                 <a href="mailto:hello@nbyteair.com" className="hover:text-primary-text">
                   联系我们
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.nbyteair.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 hover:text-primary-text"
+                >
+                  新字节航空官网
+                  <ExternalLink size={11} aria-hidden="true" />
                 </a>
               </li>
             </ul>

@@ -13,12 +13,17 @@ import { chapterById } from '@/content'
  */
 export default function ExperimentCard({
   experiment,
-  coveredQuestions = 0,
+  coveredQuestions,
+  showChapter = true,
 }: {
   experiment: Experiment
+  /** 覆盖考点数；不传时取实验自带的 examRefs 条数 */
   coveredQuestions?: number
+  /** 是否显示章节标签：在已按章节分组的列表里应关闭，避免与上方标题重复 */
+  showChapter?: boolean
 }) {
   const chapter = chapterById.get(experiment.chapterId)
+  const covered = coveredQuestions ?? experiment.examRefs.length
 
   return (
     <Link
@@ -27,9 +32,11 @@ export default function ExperimentCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-1.5">
-          {chapter && <span className="chip chip-neutral">{chapter.title}</span>}
-          {coveredQuestions > 0 && (
-            <span className="chip chip-primary">覆盖 {coveredQuestions} 道考点</span>
+          {showChapter && chapter && (
+            <span className="chip chip-neutral">{chapter.title}</span>
+          )}
+          {covered > 0 && (
+            <span className="chip chip-primary">覆盖 {covered} 道考点</span>
           )}
         </div>
         <span className="flex items-center gap-1 text-2xs text-ink-muted">

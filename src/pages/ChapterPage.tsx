@@ -87,7 +87,7 @@ export default function ChapterPage() {
             <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {chExps.map((exp) => (
                 <li key={exp.id}>
-                  <ExperimentCard experiment={exp} />
+                  <ExperimentCard experiment={exp} showChapter={false} />
                 </li>
               ))}
             </ul>

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Calculator } from 'lucide-react'
 
 import PageHeader from '@/components/ui/PageHeader'
 import { siteMeta } from '@/content'
+import { calculatorMeta } from '@/content/resources'
 
 /**
  * 高频计算器
@@ -66,10 +67,10 @@ export default function ToolsPage() {
       />
 
       <div className="shell flex flex-col gap-6 py-8 sm:py-10">
-        <DensityAltitudeCalc />
-        <StallSpeedCalc />
-        <WindCorrectionCalc />
-        <ClimbRateCalc />
+        {calculatorMeta.map((c) => {
+          const Calc = CALC_COMPONENTS[c.id]
+          return <Calc key={c.id} title={c.title} />
+        })}
 
         <p className="border-t border-hairline pt-5 text-xs leading-relaxed text-ink-muted">
           计算器用于快速估算与自查，正式的性能计算以飞行手册与机务数据为准。
@@ -234,7 +235,7 @@ function CalcShell({
 
 /* ── 1. 密度高度 ─────────────────────────────────────────────────────── */
 
-function DensityAltitudeCalc() {
+function DensityAltitudeCalc({ title }: { title: string }) {
   const [realAlt, setRealAlt] = useState(1200)
   const [fieldP, setFieldP] = useState(1013)
   const [qnh, setQnh] = useState(1013)
@@ -263,7 +264,7 @@ function DensityAltitudeCalc() {
   return (
     <CalcShell
       id="calc-da"
-      title="密度高度换算"
+      title={title}
       desc="气压高度不等于真实高度，真实高度也不等于密度高度。高原高温时三者能差出上千米——性能计算必须用密度高度。"
       inputs={
         <>
@@ -305,7 +306,7 @@ function DensityAltitudeCalc() {
 
 /* ── 2. 失速速度 ─────────────────────────────────────────────────────── */
 
-function StallSpeedCalc() {
+function StallSpeedCalc({ title }: { title: string }) {
   const [mass, setMass] = useState(12)
   const [area, setArea] = useState(0.35)
   const [clmax, setClmax] = useState(1.5)
@@ -327,7 +328,7 @@ function StallSpeedCalc() {
   return (
     <CalcShell
       id="calc-vs"
-      title="失速速度换算"
+      title={title}
       desc="失速速度只由重量、密度、翼面积和最大升力系数决定——跟姿态无关，但跟坡度和襟翼有关。"
       inputs={
         <>
@@ -368,7 +369,7 @@ function StallSpeedCalc() {
 
 /* ── 3. 风修正角 ─────────────────────────────────────────────────────── */
 
-function WindCorrectionCalc() {
+function WindCorrectionCalc({ title }: { title: string }) {
   const [tas, setTas] = useState(20)
   const [wind, setWind] = useState(10)
   const [theta, setTheta] = useState(90)
@@ -390,7 +391,7 @@ function WindCorrectionCalc() {
   return (
     <CalcShell
       id="calc-wind"
-      title="风修正角（风三角）"
+      title={title}
       desc="机头该比航迹偏多少度？注意修正角和不修正时的漂移角是两个不同的量，长得像，别混。"
       inputs={
         <>
@@ -445,7 +446,7 @@ function WindCorrectionCalc() {
 
 /* ── 4. 爬升率 ───────────────────────────────────────────────────────── */
 
-function ClimbRateCalc() {
+function ClimbRateCalc({ title }: { title: string }) {
   const [alt, setAlt] = useState(0)
   const [tempDev, setTempDev] = useState(0)
   const [mass, setMass] = useState(12)
@@ -475,7 +476,7 @@ function ClimbRateCalc() {
   return (
     <CalcShell
       id="calc-climb"
-      title="爬升率估算"
+      title={title}
       desc="剩余推力除以重量。高度一升，空气一稀，推力掉得比阻力快，爬升率就往下走。"
       inputs={
         <>
@@ -538,4 +539,17 @@ function ClimbRateCalc() {
       note="爬升率 = (T − D)·V / W，爬升角 = arcsin((T − D)/W)（407）。注意：把速度调低，剩余推力会变大，但爬升率 = 剩余推力 × V / W 是乘 V 的——最优速度在两者之间。"
     />
   )
+}
+
+/* ── 计算器注册表 ─────────────────────────────────────────────────────── */
+
+/**
+ * calculatorMeta（src/content/resources.ts）是「本站有几个计算器」的唯一口径，
+ * 这里只负责把 id 映射到组件，两者必须一一对应。
+ */
+const CALC_COMPONENTS: Record<string, ComponentType<{ title: string }>> = {
+  'calc-da': DensityAltitudeCalc,
+  'calc-vs': StallSpeedCalc,
+  'calc-wind': WindCorrectionCalc,
+  'calc-climb': ClimbRateCalc,
 }

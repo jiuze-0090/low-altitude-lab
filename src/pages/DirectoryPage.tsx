@@ -4,6 +4,8 @@ import { ArrowRight, BookOpen } from 'lucide-react'
 
 import { chapters, experiments, siteMeta } from '@/content'
 import PageHeader from '@/components/ui/PageHeader'
+import ResourceStrip from '@/components/ui/ResourceStrip'
+import { countExamPoints } from '@/content/resources'
 
 export default function DirectoryPage() {
   useEffect(() => {
@@ -25,9 +27,12 @@ export default function DirectoryPage() {
       />
 
       <div className="shell py-8 sm:py-10">
-        <ol className="flex flex-col gap-4">
+        <ResourceStrip />
+
+        <ol className="mt-8 flex flex-col gap-4">
           {chapters.map((ch) => {
             const chExps = experiments.filter((e) => e.chapterId === ch.id)
+            const chExamPoints = countExamPoints(chExps.flatMap((e) => e.examRefs))
             return (
               <li key={ch.id} className="card overflow-hidden">
                 <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:p-6">
@@ -46,6 +51,7 @@ export default function DirectoryPage() {
                       </p>
                       <div className="mt-2.5 flex flex-wrap gap-1.5">
                         <span className="chip chip-neutral">{ch.knowledgePointIds.length} 个知识点</span>
+                        <span className="chip chip-neutral">{chExamPoints} 道考点</span>
                         <span className="chip chip-primary">{chExps.length} 个实验</span>
                       </div>
                     </div>
