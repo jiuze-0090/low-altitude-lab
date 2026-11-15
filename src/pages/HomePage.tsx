@@ -25,9 +25,9 @@ export default function HomePage() {
               CAAC 理论备考 · 交互式原理
             </p>
             <h1 className="mt-3 max-w-2xl text-3xl font-bold leading-tight tracking-tight text-primary-ink sm:text-4xl">
-              先猜错一次，
+              动手验过的原理，
               <br />
-              再看懂它为什么错
+              才叫懂
             </h1>
             <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-ink-soft">
               这里不讲题，只讲原理。每个实验都从一道预测题开始——你先给答案，
@@ -55,7 +55,7 @@ export default function HomePage() {
               <Promise
                 icon={<Target size={14} aria-hidden="true" />}
                 term="先猜后看"
-                desc="做错才看得懂——记忆留存更牢"
+                desc="亲手验过一遍，才算真的懂"
               />
               <Promise
                 icon={<Sprout size={14} aria-hidden="true" />}
@@ -68,6 +68,14 @@ export default function HomePage() {
                 desc="实验结束导出 A4 速查卡"
               />
             </dl>
+
+            {/* 机构署名 */}
+            <p className="mt-9 flex items-center gap-2.5 text-2xs text-ink-muted">
+              <span className="h-px w-7 shrink-0 bg-border-strong" aria-hidden="true" />
+              <span>
+                本站由 <span className="font-semibold text-ink-soft">{siteMeta.orgFull}</span> 建设并维护
+              </span>
+            </p>
           </div>
 
           {/* 仪表盘装饰 */}

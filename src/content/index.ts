@@ -17,8 +17,9 @@ export const siteMeta: SiteMeta = {
   title: '低空原理实验室',
   titleTemplate: '%s · 低空原理实验室',
   description:
-    '面向无人机驾驶员理论考试的交互式原理学习站。先猜错一次，再看懂它为什么错——每条原理都标上这在你手上是哪根杆。',
+    '面向无人机驾驶员理论考试的交互式原理学习站。动手验过的原理，才叫懂——每条原理都标上这在你手上是哪根杆。',
   org: '新字节航空',
+  orgFull: '山东新字节航空科技有限公司',
 }
 
 export const chapters: Chapter[] = [

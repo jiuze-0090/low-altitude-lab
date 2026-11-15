@@ -4,7 +4,7 @@ import PageHeader from '@/components/ui/PageHeader'
 import Markdown from '@/components/formula/Markdown'
 
 const BODY = `
-本站是**新字节航空**旗下面向 CAAC 无人机驾驶员理论考试的公益学习站点。
+本站是**${siteMeta.orgFull}**（简称"${siteMeta.org}"）旗下面向 CAAC 无人机驾驶员理论考试的公益学习站点。
 
 我们做这件事的起因很朴素：学飞行原理的时候，最难的从来不是"记不住公式"，
 而是"不知道自己在记什么"。空气为什么能托住飞机？速度翻倍阻力涨多少？
@@ -30,20 +30,24 @@ const BODY = `
 
 ## 与机构的关系
 
-本站由 **${'新字节航空'}**（潍坊 CAAC 多旋翼无人机驾驶员培训基地）维护，
-是机构教学内容的延伸。站内所有实验的实飞体感描述，
+本站由 **${siteMeta.orgFull}** 建设并维护，
+该机构是潍坊 CAAC 多旋翼无人机驾驶员培训基地。
+本站是机构教学内容的延伸，站内所有实验的实飞体感描述，
 来自教员在真实训练中的观察记录。
+
+如需课程咨询、实训报名或设备相关服务，请通过
+[官网](https://www.nbyteair.com/) 联系招生与技术支持团队。
 `
 
 export default function AboutPage() {
   useEffect(() => {
     document.title = siteMeta.titleTemplate.replace('%s', '关于本站')
-    const tag = document.querySelector('meta[name="description"]')
-    if (tag)
-      tag.setAttribute(
-        'content',
-        '低空原理实验室由新字节航空维护，是面向 CAAC 无人机驾驶员理论考试的公益交互式原理学习站。',
-      )
+      const tag = document.querySelector('meta[name="description"]')
+      if (tag)
+        tag.setAttribute(
+          'content',
+          `低空原理实验室由${siteMeta.orgFull}建设并维护，是面向 CAAC 无人机驾驶员理论考试的公益交互式原理学习站。`,
+        )
   }, [])
 
   return (

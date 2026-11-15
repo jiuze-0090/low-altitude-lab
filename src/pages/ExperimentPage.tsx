@@ -28,7 +28,7 @@ export default function ExperimentPage() {
     }
     return {
       title: experiment.title,
-      description: `${experiment.hook} 先猜一次，再看懂它为什么错。`,
+      description: `${experiment.hook} 动手验一遍，才算真的懂。`,
     }
   }, [experiment])
 

@@ -116,8 +116,10 @@ export interface SiteMeta {
   title: string
   titleTemplate: string
   description: string
-  /** 机构署名 */
+  /** 机构署名（简称） */
   org: string
+  /** 机构主体全称（工商登记名称） */
+  orgFull: string
   /** 备案号占位（备案后回填） */
   icp?: string
 }

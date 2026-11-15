@@ -43,7 +43,7 @@ export default function SiteFooter() {
 
         <div className="mt-8 flex flex-col gap-2 border-t border-hairline pt-6 text-2xs text-ink-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {siteMeta.org} · 本站为公益学习站点，内容用于备考辅助
+            © {year} {siteMeta.orgFull} · 本站为公益学习站点，内容用于备考辅助
           </p>
           {siteMeta.icp && (
             <p>
