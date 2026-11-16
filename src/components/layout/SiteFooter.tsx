@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ExternalLink } from 'lucide-react'
 import { siteMeta } from '@/content'
+import BrandMark from '@/components/ui/BrandMark'
 
 export default function SiteFooter() {
   const year = new Date().getFullYear()
@@ -10,7 +11,10 @@ export default function SiteFooter() {
       <div className="shell py-10">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-sm">
-            <p className="text-sm font-bold text-ink">低空原理实验室</p>
+            <div className="flex items-center gap-2">
+              <BrandMark className="h-5 w-5 text-ink" />
+              <p className="text-sm font-bold text-ink">低空原理实验室</p>
+            </div>
             <p className="mt-2 text-xs leading-relaxed text-ink-muted">
               {siteMeta.description}
             </p>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Menu, X, Gauge } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
+import BrandMark from '@/components/ui/BrandMark'
 import ThemeSwitcher from '@/components/ui/ThemeSwitcher'
 
 const NAV = [
@@ -51,12 +52,7 @@ export default function SiteHeader() {
           className="flex items-center gap-2.5 rounded-md focus-visible:shadow-focus"
           aria-label="低空原理实验室 首页"
         >
-          <span
-            className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white"
-            aria-hidden="true"
-          >
-            <Gauge size={18} strokeWidth={2.2} />
-          </span>
+          <BrandMark className="h-6 w-6 text-ink" />
           <span className="flex flex-col leading-none">
             <span className="text-[15px] font-bold tracking-tight text-ink">
               低空原理实验室
