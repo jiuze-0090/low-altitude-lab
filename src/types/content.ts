@@ -55,6 +55,13 @@ export interface Experiment {
   title: string
   /** 一句话钩子（用于卡片与分享文案） */
   hook: string
+  /** 30 秒速览：先给结论、再给要点，用于首页速览层（交互实验放在第二层） */
+  quickTake?: {
+    /** 一句话结论 */
+    conclusion: string
+    /** 2~3 条要点 */
+    points: string[]
+  }
   /** 所属章节 id */
   chapterId: string
   /** 关联知识点 id 列表 */
@@ -124,4 +131,10 @@ export interface SiteMeta {
   orgFull: string
   /** 备案号占位（备案后回填） */
   icp?: string
+  /** 招生热线（对外公开咨询用） */
+  hotline?: string[]
+  /** 公众号名称 */
+  gzhName?: string
+  /** 公众号二维码图片（放在 public 下，替换图片即可，不改代码） */
+  gzhQr?: string
 }

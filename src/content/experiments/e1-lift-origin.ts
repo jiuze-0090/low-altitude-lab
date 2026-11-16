@@ -14,6 +14,15 @@ export const e1LiftOrigin: Experiment = {
   slug: 'lift-origin',
   title: '升力到底从哪来',
   hook: '为什么空气上下不一样快就能把飞机托起来？先猜一个你最熟悉的说法。',
+  quickTake: {
+    conclusion:
+      '「下面被吸住了」把因果讲反了：是机翼形状加迎角先把气流顶偏，才有上下流速差，才有压强差，才有升力。',
+    points: [
+      '伯努利只在同一条流线上成立；上下表面是两条不同流线，不能直接套「下面被吸住」。',
+      '正确的链条：机翼形状与迎角 → 气流偏转 → 上表面流速更大 → 压强更低 → 压强差合成升力。',
+      '升力垂直于相对气流，不是垂直于弦线；迎角超过约 14°～16° 会流动分离，升力反而下降。',
+    ],
+  },
   chapterId: 'ch-aero',
   knowledgePointIds: [
     'kp-lift-equation',

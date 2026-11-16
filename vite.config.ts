@@ -4,10 +4,11 @@ import { fileURLToPath, URL } from 'node:url'
 
 import katexFontTrim from './vite/plugins/katex-font-trim'
 import spaFallback from './vite/plugins/spa-fallback'
+import sitemap from './vite/plugins/sitemap'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), katexFontTrim(), spaFallback()],
+  plugins: [react(), katexFontTrim(), spaFallback(), sitemap()],
   // 云端发布/预览：监听 0.0.0.0 并放行反代 Host，避免反向代理下被 host 校验拦截
   server: {
     host: '0.0.0.0',

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, X } from 'lucide-react'
+import { Search, X, ArrowRight } from 'lucide-react'
 
 import PageHeader from '@/components/ui/PageHeader'
 import { experiments, chapters, siteMeta } from '@/content'
@@ -73,6 +73,20 @@ export default function ExamIndexPage() {
       />
 
       <div className="shell py-8 sm:py-10">
+        {/* 自测入口：这张表本身就是「想考但不确定自己能考多少」的答案 */}
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-surface px-4 py-3">
+          <p className="text-sm leading-relaxed text-ink-soft">
+            想自测能考到哪？先把这 {total} 条考点过一遍，心里有个数，再去实验室动手验。
+          </p>
+          <Link
+            to="/labs"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-primary-strong"
+          >
+            进实验室
+            <ArrowRight size={14} aria-hidden="true" />
+          </Link>
+        </div>
+
         {/* 搜索 */}
         <div className="sticky top-[var(--header-h)] z-40 -mx-4 mb-6 border-b border-hairline bg-canvas/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border sm:px-4">
           <div className="flex items-center gap-2">

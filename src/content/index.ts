@@ -30,6 +30,9 @@ export const siteMeta: SiteMeta = {
     '面向无人机驾驶员理论考试的交互式原理学习站。动手验过的原理，才叫懂——每条原理都标上这在你手上是哪根杆。',
   org: '新字节航空',
   orgFull: '山东新字节航空科技有限公司',
+  hotline: ['15610090090', '19806112859'],
+  gzhName: '新字节航空',
+  gzhQr: '/images/gzh-qrcode.png',
 }
 
 export const chapters: Chapter[] = [
@@ -129,3 +132,49 @@ export const knowledgePointById = new Map(knowledgePoints.map((k) => [k.id, k]))
 /** 首页 / 目录页用的实验数量统计 */
 export const experimentCount = experiments.length
 export const knowledgePointCount = knowledgePoints.length
+
+/** sitemap 条目 */
+export type SitemapEntry = {
+  path: string
+  changefreq: 'daily' | 'weekly' | 'monthly'
+  priority: string
+}
+
+/**
+ * 构建期 sitemap 的 URL 清单
+ * ---------------------------------------------------------------------------
+ * 由 vite 插件通过 SSR 加载本模块取用——URL 直接从内容数据推导，
+ * 不会出现"内容加了但 sitemap 漏加"的情况。
+ */
+export function sitemapUrls(): SitemapEntry[] {
+  const staticPages: SitemapEntry[] = [
+    { path: '/', changefreq: 'weekly', priority: '1.0' },
+    { path: '/principles', changefreq: 'weekly', priority: '0.9' },
+    { path: '/labs', changefreq: 'weekly', priority: '0.9' },
+    { path: '/cheatsheets', changefreq: 'monthly', priority: '0.8' },
+    { path: '/exam', changefreq: 'weekly', priority: '0.8' },
+    { path: '/tools', changefreq: 'monthly', priority: '0.7' },
+    { path: '/guides', changefreq: 'monthly', priority: '0.7' },
+    { path: '/about', changefreq: 'monthly', priority: '0.5' },
+  ]
+
+  const chapterPages: SitemapEntry[] = chapters.map((c) => ({
+    path: `/principles/${c.id}`,
+    changefreq: 'monthly',
+    priority: '0.8',
+  }))
+
+  const pointPages: SitemapEntry[] = knowledgePoints.map((k) => ({
+    path: `/points/${k.id}`,
+    changefreq: 'monthly',
+    priority: '0.6',
+  }))
+
+  const labPages: SitemapEntry[] = experiments.map((e) => ({
+    path: `/labs/${e.slug}`,
+    changefreq: 'monthly',
+    priority: '0.9',
+  }))
+
+  return [...staticPages, ...chapterPages, ...pointPages, ...labPages]
+}

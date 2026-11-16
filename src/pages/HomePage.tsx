@@ -14,6 +14,12 @@ export default function HomePage() {
 
   const featured = useMemo(() => experiments.slice(0, 4), [experiments])
 
+  /** 30 秒速览：取第一个带速览内容的实验，先给结论，交互实验放第二层 */
+  const quickTake = useMemo(() => {
+    const exp = experiments.find((e) => e.quickTake)
+    return exp && exp.quickTake ? { experiment: exp, take: exp.quickTake } : null
+  }, [])
+
   /** 时长范围从实验数据实时取，避免文案与实际耗时脱节 */
   const durationLabel = useMemo(() => {
     const mins = experiments.map((e) => e.minutes)
@@ -91,6 +97,56 @@ export default function HomePage() {
           <ClusterDecor />
         </div>
       </section>
+
+      {/* 30 秒速览：首屏先把结论给到，交互实验放第二层 */}
+      {quickTake && (
+        <section className="shell py-10 sm:py-12">
+          <div className="card overflow-hidden">
+            <div className="grid gap-6 p-6 sm:p-7 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-10">
+              <div>
+                <p className="text-2xs font-bold uppercase tracking-[0.2em] text-accent-ink">
+                  30 秒速览
+                </p>
+                <h2 className="mt-2 text-xl font-bold leading-snug text-ink sm:text-2xl">
+                  {quickTake.experiment.title}
+                </h2>
+                <p className="mt-2.5 text-sm leading-relaxed text-ink-soft">
+                  {quickTake.take.conclusion}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2.5">
+                  <Link
+                    to={`/labs/${quickTake.experiment.slug}`}
+                    className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-strong"
+                  >
+                    看完整实验
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </Link>
+                  <Link
+                    to="/exam"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border-strong bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition-colors hover:border-primary hover:text-primary-text"
+                  >
+                    先过一遍考点索引
+                  </Link>
+                </div>
+              </div>
+
+              <ul className="space-y-2.5">
+                {quickTake.take.points.map((point, i) => (
+                  <li
+                    key={point}
+                    className="flex gap-3 rounded-md border border-hairline bg-canvas px-4 py-3"
+                  >
+                    <span className="tnum flex h-5 w-5 shrink-0 items-center justify-center rounded bg-primary-soft text-2xs font-bold text-primary-ink">
+                      {i + 1}
+                    </span>
+                    <span className="text-sm leading-relaxed text-ink-soft">{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 章节概览 */}
       <section className="shell py-10 sm:py-12">
