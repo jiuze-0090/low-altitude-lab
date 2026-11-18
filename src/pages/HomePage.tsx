@@ -152,7 +152,7 @@ export default function HomePage() {
       <section className="shell py-10 sm:py-12">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-xl font-bold text-ink">五条主线</h2>
+            <h2 className="text-xl font-bold text-ink">六条主线</h2>
             <p className="mt-1.5 text-sm text-ink-soft">
               按一条线走完，比零散看二十个知识点有效
             </p>

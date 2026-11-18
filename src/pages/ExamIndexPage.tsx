@@ -8,8 +8,8 @@ import { experiments, chapters, siteMeta } from '@/content'
 /**
  * 考点索引
  * ---------------------------------------------------------------------------
- * 把九个实验挂着的 examRefs 汇总成一张可检索的表。
- * 题号来自题库实测（all-questions-verified.csv，1979 题），
+ * 把各实验挂着的 examRefs 汇总成一张可检索的表。
+ * 题号来自题库实测（最终入库 1953 题，编号与题库一致），
  * 每条都能点回它出自哪个实验，方便回去看推导过程。
  */
 export default function ExamIndexPage() {
@@ -69,7 +69,7 @@ export default function ExamIndexPage() {
       <PageHeader
         eyebrow="索引"
         title="考点索引"
-        description={`本站九个实验共挂上 ${total} 条考点，去重后 ${uniqueCodes} 个题号。每条都标了出处，点一下就能跳回那个实验的推导过程。`}
+        description={`本站 ${experiments.length} 个实验共挂上 ${total} 条考点，去重后 ${uniqueCodes} 个题号。每条都标了出处，点一下就能跳回那个实验的推导过程。`}
       />
 
       <div className="shell py-8 sm:py-10">

@@ -14,7 +14,7 @@ export default function DirectoryPage() {
     if (tag)
       tag.setAttribute(
         'content',
-        '按气动原理、安定性、多旋翼、气象环境、飞行性能五条主线，系统理解无人机飞行原理。',
+        '按气动原理、安定性、多旋翼、气象环境、飞行性能、起降着陆六条主线，系统理解无人机飞行原理。',
       )
   }, [])
 
@@ -23,7 +23,7 @@ export default function DirectoryPage() {
       <PageHeader
         eyebrow="目录"
         title="原理目录"
-        description="五条主线，每条从「为什么」开始，到「这在你手上是哪根杆」结束。点进章节看知识点，点进实验室动手拧参数。"
+        description="六条主线，每条从「为什么」开始，到「这在你手上是哪根杆」结束。点进章节看知识点，点进实验室动手拧参数。"
       />
 
       <div className="shell py-8 sm:py-10">

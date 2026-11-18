@@ -7,6 +7,7 @@ import E4CgStability from './e4/E4CgStability'
 import E5ControlSurfaces from './e5/E5ControlSurfaces'
 import E6MultirotorYaw from './e6/E6MultirotorYaw'
 import E7ClimbPerformance from './e7/E7ClimbPerformance'
+import E8SidewindLanding from './e8/E8SidewindLanding'
 import M1AltitudeLie from './m1/M1AltitudeLie'
 import M2WindCorrection from './m2/M2WindCorrection'
 
@@ -19,6 +20,7 @@ const REGISTRY: Record<string, (props: { values: Record<string, number> }) => Re
   'e5-control-surfaces': E5ControlSurfaces as (props: { values: Record<string, number> }) => ReactNode,
   'e6-multirotor-yaw': E6MultirotorYaw as (props: { values: Record<string, number> }) => ReactNode,
   'e7-climb-performance': E7ClimbPerformance as (props: { values: Record<string, number> }) => ReactNode,
+  'e8-sidewind-landing': E8SidewindLanding as (props: { values: Record<string, number> }) => ReactNode,
   'm1-altitude-lie': M1AltitudeLie as (props: { values: Record<string, number> }) => ReactNode,
   'm2-wind-correction': M2WindCorrection as (props: { values: Record<string, number> }) => ReactNode,
 }

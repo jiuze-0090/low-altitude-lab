@@ -7,6 +7,7 @@ import { e4CgStability } from './experiments/e4-cg-stability'
 import { e5ControlSurfaces } from './experiments/e5-control-surfaces'
 import { e6MultirotorYaw } from './experiments/e6-multirotor-yaw'
 import { e7ClimbPerformance } from './experiments/e7-climb-performance'
+import { e8SidewindLanding } from './experiments/e8-sidewind-landing'
 import { m1AltitudeLie } from './experiments/m1-altitude-lie'
 import { m2WindCorrection } from './experiments/m2-wind-correction'
 
@@ -15,12 +16,13 @@ import { stabilityPoints } from './knowledge-points/stability'
 import { multirotorPoints } from './knowledge-points/multirotor'
 import { envPoints } from './knowledge-points/env'
 import { performancePoints } from './knowledge-points/performance'
+import { takeoffLandingPoints } from './knowledge-points/takeoff-landing'
 
 /**
  * 全站内容入口
  * ---------------------------------------------------------------------------
  * 内容以 JSON/TS 管理，构建期静态导入 → 产物为纯静态文件，无运行时请求。
- * 全部实验数据来自题库实测（2026-11 全量 1968 题）。
+ * 全部实验数据来自题库实测（2026-11-18 最终入库 1953 题）。
  */
 
 export const siteMeta: SiteMeta = {
@@ -100,6 +102,19 @@ export const chapters: Chapter[] = [
     knowledgePointIds: ['kp-climb-performance', 'kp-glide-range'],
     experimentIds: ['e7-climb-performance'],
   },
+  {
+    id: 'ch-takeoff-landing',
+    order: 6,
+    title: '起降与着陆',
+    intro:
+      '起飞那几十秒和落地那三十秒，决定了这架飞机安不安全。侧风怎么修正、下降率怎么压住、接地点怎么修，都在这里。',
+    knowledgePointIds: [
+      'kp-landing-touchdown',
+      'kp-sidewind-correction',
+      'kp-landing-deviation',
+    ],
+    experimentIds: ['e8-sidewind-landing'],
+  },
 ]
 
 /** 知识点（按章节顺序排列，前后篇导航依此串读）*/
@@ -109,6 +124,7 @@ export const knowledgePoints: KnowledgePoint[] = [
   ...multirotorPoints,
   ...envPoints,
   ...performancePoints,
+  ...takeoffLandingPoints,
 ]
 
 export const experiments: Experiment[] = [
@@ -119,6 +135,7 @@ export const experiments: Experiment[] = [
   e5ControlSurfaces,
   e6MultirotorYaw,
   e7ClimbPerformance,
+  e8SidewindLanding,
   m1AltitudeLie,
   m2WindCorrection,
 ]

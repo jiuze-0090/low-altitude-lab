@@ -28,7 +28,7 @@ export default function ResourceStrip() {
       value: knowledgePoints.length,
       unit: '个',
       label: '知识点',
-      hint: '五条主线串读',
+      hint: '六条主线串读',
     },
     {
       to: '/exam',
