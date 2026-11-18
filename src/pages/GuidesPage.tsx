@@ -5,11 +5,13 @@ import PageHeader from '@/components/ui/PageHeader'
 import {
   authorities,
   airspaceSystems,
+  beijingUavRules,
   controlUnits,
   controlledClasses,
   filingRules,
   flightLevels,
   type GuideTable,
+  noFlyNotice,
   uavAirspace,
   uavClassNumbers,
   uavControlledScope,
@@ -37,6 +39,8 @@ const SECTIONS = [
   { id: 'wx', label: '气象数字' },
   { id: 'uav-class', label: '无人机分类' },
   { id: 'authority', label: '立法主体' },
+  { id: 'beijing', label: '北京新规' },
+  { id: 'no-fly', label: '禁飞区通告' },
 ]
 
 export default function GuidesPage() {
@@ -46,7 +50,7 @@ export default function GuidesPage() {
     if (tag)
       tag.setAttribute(
         'content',
-        '空域分类、管制空域四类、无人机适飞与隔离融合空域、飞行高度层基准、申报间隔、气象数字——全部对照题库题号的速查表。',
+        '空域分类、管制空域四类、无人机适飞与隔离融合空域、飞行高度层基准、申报间隔、气象数字，以及北京新规与首都禁飞区通告——全部对照题库题号的速查表。',
       )
   }, [])
 
@@ -218,6 +222,28 @@ export default function GuidesPage() {
           <SectionTitle title="谁制定、谁实施" desc="最后一组，纯记忆。" />
           <div className="mt-4">
             <TableView table={authorities} />
+          </div>
+        </section>
+
+        {/* ── 北京新规 ─────────────────────────────────────────────────── */}
+        <section id="beijing" className="scroll-mt-32">
+          <SectionTitle
+            title="北京市无人驾驶航空器管理规定"
+            desc="2026 年 11 月 15 日刚施行，题库已收录 24 题。考 CAAC 不考地方规定，但本地飞手和机构必须知道红线在哪。"
+          />
+          <div className="mt-4">
+            <TableView table={beijingUavRules} />
+          </div>
+        </section>
+
+        {/* ── 禁飞区通告 ───────────────────────────────────────────────── */}
+        <section id="no-fly" className="scroll-mt-32">
+          <SectionTitle
+            title="禁飞区通告 A4484/26"
+            desc="首都新设特别限制区 ZB (SR) 801，19 题。数字必须背死：代号、坐标、半径、垂直范围、有效期。"
+          />
+          <div className="mt-4">
+            <TableView table={noFlyNotice} />
           </div>
         </section>
       </div>
