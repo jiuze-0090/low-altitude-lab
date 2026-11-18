@@ -79,22 +79,30 @@ export default function SiteFooter() {
         <div className="mt-8 grid gap-5 border-t border-hairline pt-6 sm:grid-cols-[auto_1fr] sm:items-start sm:gap-7">
           <div className="flex items-start gap-3">
             {siteMeta.gzhQr && !qrMissing ? (
-              <img
-                src={siteMeta.gzhQr}
-                alt={`公众号 ${siteMeta.gzhName} 二维码`}
-                width={72}
-                height={72}
-                loading="lazy"
-                decoding="async"
-                onError={() => setQrMissing(true)}
-                className="h-[72px] w-[72px] shrink-0 rounded-md border border-hairline bg-white object-contain p-1"
-              />
+              <a
+                href={siteMeta.gzhQr}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="点击查看大图后扫码"
+                className="shrink-0"
+              >
+                <img
+                  src={siteMeta.gzhQr}
+                  alt={`公众号 ${siteMeta.gzhName} 二维码`}
+                  width={112}
+                  height={112}
+                  loading="lazy"
+                  decoding="async"
+                  onError={() => setQrMissing(true)}
+                  className="h-28 w-28 rounded-md border border-hairline bg-white object-contain p-1"
+                />
+              </a>
             ) : (
               <span
-                className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-md border border-hairline bg-surface text-ink-muted"
+                className="flex h-28 w-28 shrink-0 items-center justify-center rounded-md border border-hairline bg-surface text-ink-muted"
                 aria-hidden="true"
               >
-                <QrCode size={24} />
+                <QrCode size={32} />
               </span>
             )}
             <div>
@@ -102,6 +110,11 @@ export default function SiteFooter() {
               <p className="mt-1 text-2xs leading-relaxed text-ink-muted">
                 {qrMissing ? '二维码即将上线，先看每日一题' : '每日一题、备考干货，不刷屏'}
               </p>
+              {!qrMissing && (
+                <p className="mt-0.5 text-2xs leading-relaxed text-ink-muted">
+                  点击二维码看大图再扫，或在微信里长按识别
+                </p>
+              )}
             </div>
           </div>
 
