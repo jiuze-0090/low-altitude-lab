@@ -108,7 +108,7 @@ export default function SiteFooter() {
             <div>
               <p className="text-sm font-bold text-ink">公众号 · {siteMeta.gzhName}</p>
               <p className="mt-1 text-2xs leading-relaxed text-ink-muted">
-                {qrMissing ? '二维码即将上线，先看每日一题' : '每日一题、备考干货，不刷屏'}
+                {qrMissing ? '二维码加载失败，请在微信搜索公众号：新字节航空' : '每日一题、备考干货，不刷屏'}
               </p>
               {!qrMissing && (
                 <p className="mt-0.5 text-2xs leading-relaxed text-ink-muted">
