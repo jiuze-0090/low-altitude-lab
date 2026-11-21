@@ -31,7 +31,7 @@ export default function ExperimentCard({
       className="card group flex flex-col p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover focus-visible:shadow-focus"
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
           {showChapter && chapter && (
             <span className="chip chip-neutral">{chapter.title}</span>
           )}
@@ -39,7 +39,8 @@ export default function ExperimentCard({
             <span className="chip chip-primary">覆盖 {covered} 道考点</span>
           )}
         </div>
-        <span className="flex items-center gap-1 text-2xs text-ink-muted">
+        {/* shrink-0 + whitespace-nowrap：耗时数字不允许被左侧 chip 挤压换行 */}
+        <span className="flex shrink-0 items-center gap-1 whitespace-nowrap text-2xs text-ink-muted">
           <Clock size={11} aria-hidden="true" />
           {experiment.minutes} 分钟
         </span>
