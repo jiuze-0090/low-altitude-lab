@@ -153,7 +153,7 @@ export const performanceCard: CheatsheetCard = {
   rows: [
     { term: '爬升角', value: 'γ = arcsin((T − D) / W)', note: '407' },
     { term: '爬升率', value: 'R_c = (T − D)·V / W', note: '剩余推力 ÷ 重量' },
-    { term: '匀速爬升时的升力', value: 'L = W·cosγ < W', note: '264' },
+    { term: '匀速爬升时的升力', value: 'L = W·cosγ < W', note: '274' },
     { term: '高度升高', value: 'ρ↓ → 推力↓ → 爬升率↓', note: '496' },
     { term: '起降距离', value: '高原更长', note: '496 / 410' },
     { term: 'Vx 与 Vy 随高度', value: 'Vx 增大，Vy 减小', note: '464' },

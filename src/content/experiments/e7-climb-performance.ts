@@ -13,7 +13,7 @@ import type { Experiment } from '@/types/content'
  *   213  水平转弯坡度增大 → 失速速度增大
  *   247  下滑中的飞机：L = W·cosγ
  *   251  速度增加而诱导阻力减少时，蒙皮摩阻增加
- *   264  保持匀速上升时，升力小于重力（L = W·cosγ）
+ *   274  保持匀速上升时，升力小于重力（L = W·cosγ）
  *   341  平飞时载重量越大，失速速度越大
  *   407  飞机爬升角的大小取决于剩余推力和飞机重量
  *   464  高度增加：最佳爬升角速度 Vx 增大，最佳爬升率速度 Vy 减小
@@ -74,7 +74,7 @@ export const e7ClimbPerformance: Experiment = {
     attribution: String.raw`
 ### 爬升的力学账
 
-匀速爬升时，把重力分解到航迹方向和垂直航迹方向（题 264）：
+匀速爬升时，把重力分解到航迹方向和垂直航迹方向（题 274）：
 
 $$L = W\cos\gamma < W, \qquad T - D = W\sin\gamma$$
 
@@ -252,7 +252,7 @@ $$\gamma = \arctan\frac{1}{L/D}, \qquad L = W\cos\gamma \ (\text{题 247})$$
     rows: [
       { term: '爬升角', value: 'γ = arcsin((T − D) / W)', note: '题 407' },
       { term: '爬升率', value: 'R_c = (T − D)·V / W', note: '剩余推力 ÷ 重量' },
-      { term: '匀速爬升', value: 'L = W·cosγ < W', note: '题 264' },
+      { term: '匀速爬升', value: 'L = W·cosγ < W', note: '题 274' },
       { term: '高度升高', value: 'ρ↓ → 推力↓ → 爬升率↓', note: '题 496' },
       { term: 'Vx / Vy 随高度', value: 'Vx 增大，Vy 减小', note: '题 464' },
       { term: 'Vx 近似', value: 'Vx ≈ √3 · Vs', note: '最佳爬升角' },
@@ -285,5 +285,7 @@ $$\gamma = \arctan\frac{1}{L/D}, \qquad L = W\cos\gamma \ (\text{题 247})$$
     { code: '464', gist: '高度增加：Vx 增大、Vy 减小' },
     { code: '496', gist: '气压降低：起降距离增加、爬升率减小' },
     { code: '652', gist: '爬升率过小时应柔和增大俯仰角' },
+    { code: '412', gist: '平飞航程最长对应最佳升阻比（远航）速度' },
+    { code: '1428', gist: '最大升阻比飞行气动效率最高、耗油率最低，可实现最大航程' },
   ],
 }
