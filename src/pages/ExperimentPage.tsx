@@ -55,6 +55,16 @@ export default function ExperimentPage() {
     .map((id) => knowledgePointById.get(id))
     .filter((p) => p !== undefined)
 
+  /**
+   * 实飞体感：优先用多句的 fieldNotes[]，旧的单段 fieldNote 作为兼容回退。
+   * 一句一条，读起来像教员在旁边说话，而不是一段说明书。
+   */
+  const fieldNotes = experiment.fieldNotes?.length
+    ? experiment.fieldNotes
+    : experiment.fieldNote
+      ? [experiment.fieldNote]
+      : []
+
   return (
     <article className="page-enter">
       {/* 页头 */}
@@ -104,6 +114,7 @@ export default function ExperimentPage() {
                 </div>
                 <ExperimentCanvas
                   controls={experiment.controls}
+                  nodes={experiment.nodes}
                   render={(values) => <Canvas values={values} />}
                 />
               </section>
@@ -127,12 +138,21 @@ export default function ExperimentPage() {
               </div>
             </section>
 
-            {/* 实飞经验 */}
-            {experiment.fieldNote && (
+            {/* 实飞经验：教员口头禅（多条） */}
+            {fieldNotes.length > 0 && (
               <section className="mt-6 rounded-md border border-hairline bg-canvas p-5">
                 <h2 className="text-sm font-bold text-ink">实飞体感</h2>
-                <div className="prose-lab mt-2">
-                  <Markdown content={experiment.fieldNote} />
+                <div className="mt-3 flex flex-col gap-3">
+                  {fieldNotes.map((note, i) => (
+                    <div
+                      key={i}
+                      className="border-l-2 border-accent/40 pl-3.5"
+                    >
+                      <div className="prose-lab text-[15px]">
+                        <Markdown content={note} />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </section>
             )}

@@ -222,7 +222,8 @@ $$\gamma = \arctan\frac{1}{L/D}, \qquad L = W\cos\gamma \ (\text{题 247})$$
 - 顺风 → 地速增加，**地速航程**增加，**空速航程**不变。
 `,
 
-  fieldNote: String.raw`
+  fieldNotes: [
+    String.raw`
 **高原实飞的三条铁律**：
 
 1. **起飞前算密度高度，不看海拔**。
@@ -236,7 +237,8 @@ $$\gamma = \arctan\frac{1}{L/D}, \qquad L = W\cos\gamma \ (\text{题 247})$$
 3. **高温时段不飞**。
    早晨的气温比午后低 10 ℃，密度高度能差 1200 m，
    爬升率差一大截。
-
+`,
+    String.raw`
 **多旋翼的对应关系**：
 
 多旋翼没有"襟翼"，但**桨盘载荷**是同一个物理量。
@@ -246,6 +248,7 @@ $$\gamma = \arctan\frac{1}{L/D}, \qquad L = W\cos\gamma \ (\text{题 247})$$
 所以"先向前加速一段再爬升"在高密度高度下尤其值得练：
 速度换来的效率提升，往往比省下来的油门更值钱。
 `,
+  ],
 
   cheatsheet: {
     title: '爬升率与航迹速查卡',

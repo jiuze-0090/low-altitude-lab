@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import { useNodeSignal } from '@/components/experiment/NodeFeed'
+
 /**
  * E3 · 迎角与失速
  * ---------------------------------------------------------------------------
@@ -11,6 +13,9 @@ import { useMemo } from 'react'
  *   · 超临界后 C_L 骤降、C_D 骤增（268/332）
  *   · 物理原因是上表面附面层大面积分离（392）
  *   · 前缘结冰让临界迎角提前、C_L 变小（370）
+ *
+ * 节点通道：把三个物理结论作为信号上报，
+ * 跨过阈值时由内容层的 nodes[] 给出教员提示（见 e3-alpha-stall.ts）。
  */
 
 const RHO = 1.225
@@ -62,6 +67,11 @@ export default function E3AlphaStall({ values }: { values: Record<string, number
   const clMax = iced ? 1.05 : 1.5
   const weight = 1.5 * 9.81 // 示意重量 1.5 kg
   const vs = Math.sqrt((2 * weight) / (RHO * AREA * clMax))
+
+  /* ── 节点通道：上报三个物理状态 ──────────────────────────────────── */
+  useNodeSignal('stall', stalled)
+  useNodeSignal('iced', iced)
+  useNodeSignal('slow', v < vs)
 
   // ── C_L 曲线 ────────────────────────────────────────────────────────
   const CX = 46

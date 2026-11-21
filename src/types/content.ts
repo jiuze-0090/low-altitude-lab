@@ -45,6 +45,34 @@ export interface CheatsheetRow {
   note?: string
 }
 
+/**
+ * 实验节点：模型跨越某个物理阈值时触发的一次性反馈
+ * ---------------------------------------------------------------------------
+ * 这是「动手验过的原理」的第二条通道：
+ *   第一条 = 拖参数看数字变（被动）
+ *   第二条 = 跨过临界的那一刻，有人在你旁边说一句话（主动）
+ *
+ * 设计约束：
+ *   1. `signal` 是实验组件用 useNodeSignal 上报的物理状态名，
+ *      **物理判据只存在于组件里**（避免内容层复制一份模型导致口径漂移）。
+ *   2. 内容层只负责「说什么」——文案、教员口吻、挂哪个题号。
+ *   3. 上升沿触发：信号由假变真时响一次；用户退回去再越界会重新响。
+ */
+export interface ExperimentNode {
+  /** 唯一 id */
+  id: string
+  /** 触发信号名，与实验组件上报的 signal 对应 */
+  signal: string
+  /** 节点标题（短） */
+  title: string
+  /** 教员口吻的一句话 */
+  say: string
+  /** 关联题库编号（真实题号，便于回溯核对） */
+  examRef?: string
+  /** 语气 */
+  tone?: 'info' | 'ok' | 'warn' | 'bad'
+}
+
 /** 实验室（交互实验） */
 export interface Experiment {
   /** 唯一 id，如 e1-lift */
@@ -81,8 +109,15 @@ export interface Experiment {
   }
   /** 对应题库考点（题库编号 + 简述），用于"这在考试里怎么问" */
   examRefs: Array<{ code: string; gist: string }>
-  /** 关联的实飞经验 */
+  /**
+   * 节点：跨越物理阈值时触发的教员提示
+   * 触发信号由实验组件上报，判据不写在这里（见 ExperimentNode 注释）
+   */
+  nodes?: ExperimentNode[]
+  /** 关联的实飞经验（单段，向后兼容旧内容） */
   fieldNote?: string
+  /** 关联的实飞经验（多条，每条一段教员口吻） */
+  fieldNotes?: string[]
   /** 预计耗时（分钟），用于列表页 */
   minutes: number
 }
