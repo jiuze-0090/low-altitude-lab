@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import { writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { createServer, type Plugin } from 'vite'
@@ -5,6 +6,24 @@ import { createServer, type Plugin } from 'vite'
 const ORIGIN = 'https://lab.nbyteair.com'
 
 type Entry = { path: string; changefreq: string; priority: string }
+
+/**
+ * 取仓库最后一次提交时间作为 lastmod
+ * ---------------------------------------------------------------------------
+ * 用构建时刻会让每次构建都声称"全站更新了"，百度会反复重抓；
+ * 用内容实际改动的时间才准确。取不到（无 git 环境）就退回构建日。
+ */
+function lastModified(): string {
+  try {
+    const iso = execSync('git log -1 --format=%cI', { stdio: ['ignore', 'pipe', 'ignore'] })
+      .toString()
+      .trim()
+    if (iso) return iso.slice(0, 10)
+  } catch {
+    // 没有 git 或命令失败，用构建日兜底
+  }
+  return new Date().toISOString().slice(0, 10)
+}
 
 /**
  * 构建期生成 sitemap.xml
@@ -46,12 +65,14 @@ export default function sitemap(): Plugin {
         this.warn('sitemap：内容模块未取到 URL 清单，跳过生成')
         return
       }
+      const lastmod = lastModified()
       const body = entries
         .map(
           (e) =>
             [
               '  <url>',
               `    <loc>${ORIGIN}${e.path}</loc>`,
+              `    <lastmod>${lastmod}</lastmod>`,
               `    <changefreq>${e.changefreq}</changefreq>`,
               `    <priority>${e.priority}</priority>`,
               '  </url>',
