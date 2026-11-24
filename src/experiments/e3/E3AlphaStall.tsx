@@ -461,7 +461,7 @@ export default function E3AlphaStall({ values }: { values: Record<string, number
             </g>
 
             {/* ── 拖拽迎角杆（样板交互）─────────────────────────────
-                竖直导轨：上=大迎角。把手命中区放大到 r=17，移动端好抓。 */}
+                竖直导轨：上=大迎角。把手命中区 r=21（约 44px），满足移动端触摸目标建议值。 */}
             <g>
               <line
                 x1={DRAG_X}
@@ -496,11 +496,11 @@ export default function E3AlphaStall({ values }: { values: Record<string, number
                   </text>
                 </g>
               ))}
-              {/* 透明大命中圆（触摸友好） */}
+              {/* 透明大命中圆（触摸友好，44px 目标） */}
               <circle
                 cx={DRAG_X}
                 cy={handleY}
-                r="17"
+                r="21"
                 fill="transparent"
                 className="cursor-grab active:cursor-grabbing"
                 onPointerDown={onPointerDown}
