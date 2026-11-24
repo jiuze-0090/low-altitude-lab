@@ -19,6 +19,15 @@ import type { Experiment } from '@/types/content'
  *      公式写法为 $$...$$（独立式）与 $...$（行内式），由 Markdown 组件转 KaTeX。
  */
 export const e6MultirotorYaw: Experiment = {
+  quickTake: {
+    conclusion:
+      '「想右转就给右边电机减速」只对了一半：多轴偏航靠的是反扭矩失去平衡，而加速那组电机的旋向，和机头偏转方向是相反的。',
+    points: [
+      '旋翼反扭矩迫使机体朝旋翼旋转的反方向偏转（题460）；尾桨的作用就是抵消这个反作用扭矩（题476）。',
+      '多轴靠旋翼两两反向旋转互相平衡反扭矩（题740）：4 顺 + 4 逆（题704），改变转速差就产生净偏航力矩。',
+      '关键区别：偏航靠反扭矩，俯仰和滚转靠各旋翼拉力差（题739）——不是同一套物理；多轴无自转下滑能力（题722）。',
+    ],
+  },
   id: 'e6-multirotor-yaw',
   slug: 'multirotor-yaw',
   title: '想右转，为什么要给左边的电机加油',

@@ -20,6 +20,15 @@ import type { Experiment } from '@/types/content'
  *      公式写法为 $$...$$（独立式）与 $...$（行内式），由 Markdown 组件转 KaTeX。
  */
 export const e3AlphaStall: Experiment = {
+  quickTake: {
+    conclusion:
+      '「迎角越大升力越大」只在临界迎角之前成立；过了临界，气流分离，升力骤降——失速的直接原因始终是迎角超临界，不是速度小。',
+    points: [
+      '迎角是翼弦与相对气流的夹角（题270），不是与机身纵轴或水平面的夹角。',
+      '低速、高速、转弯三种情况都可能超临界失速（题253）；超临界后升力系数迅速减小（题268）、升力骤降阻力骤增（题332）。',
+      '失速改出按题215：立即推杆到底减小迎角、增速让气流重新附着；加油门是辅助，方向不能反。',
+    ],
+  },
   id: 'e3-alpha-stall',
   slug: 'alpha-stall',
   title: '迎角越大，升力越大？',

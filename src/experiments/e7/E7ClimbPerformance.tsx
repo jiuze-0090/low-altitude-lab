@@ -92,9 +92,8 @@ export default function E7ClimbPerformance({ values }: { values: Record<string, 
     const excess = T - d
     const climb = (excess * v) / W
     const vs = Math.sqrt((2 * W) / (rho * S_WING * CL_MAX))
-    const vx = vs * Math.sqrt(3)
     const glide = Math.atan(d / W) * (180 / Math.PI)
-    return { rho, da, sigma, T, d, cl, cd, excess, climb, vs, vx, glide }
+    return { rho, da, sigma, T, d, cl, cd, excess, climb, vs, glide }
   }, [alt, dT, mass, v, W])
 
   /** 速度-高度包线 */
@@ -407,7 +406,7 @@ export default function E7ClimbPerformance({ values }: { values: Record<string, 
           <span className="text-panel-muted">失速速度</span> Vs = √(2W/ρSC_Lmax) ={' '}
           <span className="text-panel-warn">{current.vs.toFixed(1)}</span> m/s
           <span className="ml-2 text-panel-muted">
-            Vx ≈ √3·Vs = {current.vx.toFixed(1)} m/s；当前 V = {v.toFixed(0)} m/s
+            Vx（剩余推力最大点）≈ {envelope.reduce((a, b) => (Math.abs(b.h - alt) < Math.abs(a.h - alt) ? b : a)).vx.toFixed(1)} m/s；当前 V = {v.toFixed(0)} m/s
             {v < current.vs ? '（低于失速速度！）' : ''}
           </span>
         </p>

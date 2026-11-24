@@ -19,6 +19,15 @@ import type { Experiment } from '@/types/content'
  *   已与题库结论逐条对拍通过。
  */
 export const m1AltitudeLie: Experiment = {
+  quickTake: {
+    conclusion:
+      '高度表不是在报"你有多高"，它只报"这个气压在标准大气里对应多高"；实际大气一偏标准，指示就骗你。',
+    points: [
+      '比标准大气冷时，气压高度表指示比实际飞行高度偏高（题500）——你以为还高，实际比想的低。',
+      '飞向低压区，按高度表指示飞实际高度会逐渐降低（题499）；气温高于标准时飞机载重量要减小（题495）。',
+      '气压高度、密度高度、真实高度是三回事；密度↓（高度↑或温度↑）会让起降距离增加、爬升率减小（题496）。',
+    ],
+  },
   id: 'm1-altitude-lie',
   slug: 'altitude-lie',
   title: '高度表在骗你',

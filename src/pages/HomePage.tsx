@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Target, Sprout, Printer } from 'lucide-react'
+import { ArrowRight, ChevronLeft, ChevronRight, Target, Sprout, Printer } from 'lucide-react'
 
 import { chapters, experiments, siteMeta } from '@/content'
 import ExperimentCard from '@/components/ui/ExperimentCard'
@@ -14,11 +14,15 @@ export default function HomePage() {
 
   const featured = useMemo(() => experiments.slice(0, 4), [experiments])
 
-  /** 30 秒速览：取第一个带速览内容的实验，先给结论，交互实验放第二层 */
-  const quickTake = useMemo(() => {
-    const exp = experiments.find((e) => e.quickTake)
-    return exp && exp.quickTake ? { experiment: exp, take: exp.quickTake } : null
-  }, [])
+  /** 30 秒速览：全部带速览内容的实验，一次显示一条，可切换 */
+  const quickTakes = useMemo(
+    () =>
+      experiments.flatMap((e) => (e.quickTake ? [{ experiment: e, take: e.quickTake }] : [])),
+    [],
+  )
+  const [takeIndex, setTakeIndex] = useState(0)
+  const activeTake = quickTakes[takeIndex] ?? quickTakes[0] ?? null
+  const takeCount = quickTakes.length
 
   /** 时长范围从实验数据实时取，避免文案与实际耗时脱节 */
   const durationLabel = useMemo(() => {
@@ -98,9 +102,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 30 秒速览：首屏先把结论给到，交互实验放第二层 */}
-      {quickTake && (
+      {/* 30 秒速览：首屏先把结论给到，交互实验放第二层；可逐条切换 */}
+      {activeTake && (
         <section className="shell py-10 sm:py-12">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold text-ink-soft">
+              全部 {takeCount} 个实验的结论，逐个看
+            </p>
+            {takeCount > 1 && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setTakeIndex((i) => (i - 1 + takeCount) % takeCount)}
+                  aria-label="上一条速览"
+                  className="flex h-9 w-9 items-center justify-center rounded-md border border-border-strong bg-surface text-ink transition-colors hover:border-primary hover:text-primary-text"
+                >
+                  <ChevronLeft size={17} aria-hidden="true" />
+                </button>
+                <span className="tnum min-w-[3.5rem] text-center text-xs font-semibold text-ink-soft">
+                  {takeIndex + 1} / {takeCount}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setTakeIndex((i) => (i + 1) % takeCount)}
+                  aria-label="下一条速览"
+                  className="flex h-9 w-9 items-center justify-center rounded-md border border-border-strong bg-surface text-ink transition-colors hover:border-primary hover:text-primary-text"
+                >
+                  <ChevronRight size={17} aria-hidden="true" />
+                </button>
+              </div>
+            )}
+          </div>
           <div className="card overflow-hidden">
             <div className="grid gap-6 p-6 sm:p-7 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-10">
               <div>
@@ -108,14 +140,14 @@ export default function HomePage() {
                   30 秒速览
                 </p>
                 <h2 className="mt-2 text-xl font-bold leading-snug text-ink sm:text-2xl">
-                  {quickTake.experiment.title}
+                  {activeTake.experiment.title}
                 </h2>
                 <p className="mt-2.5 text-sm leading-relaxed text-ink-soft">
-                  {quickTake.take.conclusion}
+                  {activeTake.take.conclusion}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2.5">
                   <Link
-                    to={`/labs/${quickTake.experiment.slug}`}
+                    to={`/labs/${activeTake.experiment.slug}`}
                     className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2.5 text-sm font-bold text-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-strong"
                   >
                     看完整实验
@@ -131,7 +163,7 @@ export default function HomePage() {
               </div>
 
               <ul className="space-y-2.5">
-                {quickTake.take.points.map((point, i) => (
+                {activeTake.take.points.map((point, i) => (
                   <li
                     key={point}
                     className="flex gap-3 rounded-md border border-hairline bg-canvas px-4 py-3"

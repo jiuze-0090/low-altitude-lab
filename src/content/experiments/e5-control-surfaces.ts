@@ -26,6 +26,15 @@ import type { Experiment } from '@/types/content'
  *      公式写法为 $$...$$（独立式）与 $...$（行内式），由 Markdown 组件转 KaTeX。
  */
 export const e5ControlSurfaces: Experiment = {
+  quickTake: {
+    conclusion:
+      '「压副翼是把机身推过去」是错的：舵面不推机身，是先改变局部升力，产生力矩，让飞机绕轴转，姿态变了迎角才变。',
+    points: [
+      '副翼管滚转（绕纵轴，题187）、升降舵管俯仰（绕横轴，题188）、方向舵管偏航（绕立轴，题189）。',
+      '向右压副翼时左翼升力大于右翼（题190）；前推升降舵尾部长力向上、机头下俯迎角减小（题191），后拉则迎角增大（题192）。',
+      '每个舵面都有副作用：副翼逆偏转与外侧阻力大（题203）、襟翼增升也增阻——操纵是力矩的连锁，不是直接搬动飞机。',
+    ],
+  },
   id: 'e5-control-surfaces',
   slug: 'control-surfaces',
   title: '三个舵面，三个轴',

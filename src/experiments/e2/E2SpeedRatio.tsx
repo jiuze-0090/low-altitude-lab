@@ -51,9 +51,10 @@ export default function E2SpeedRatio({ values }: { values: Record<string, number
   const inducedRatio = inducedCd(cl, ar) / cd // 诱导阻力占比
 
   // ── 极曲线（画一整条，并标出当前点与两个关键点）─────────────────────
+  // 从 α=0 起画：负迎角对应负 C_L，会落到横轴下方，不是考点范围。
   const polar = useMemo(() => {
     const pts: Array<{ cl: number; cd: number }> = []
-    for (let a = -4; a <= 20; a += 0.25) {
+    for (let a = 0; a <= 20; a += 0.25) {
       const c = liftCoefficient(a)
       const d = CD0 + inducedCd(c, ar)
       pts.push({ cl: c, cd: d })
@@ -61,17 +62,22 @@ export default function E2SpeedRatio({ values }: { values: Record<string, number
     return pts
   }, [ar])
 
-  /** 极曲线坐标映射（画布 300×210，左下原点） */
+  /**
+   * 极曲线坐标映射（画布 300×210，左下原点 = (C_D=0, C_L=0)）
+   * 标准画法：C_D 横轴、C_L 纵轴 —— 这样原点到曲线上点的连线斜率
+   * ΔC_L/ΔC_D 才等于升阻比 L/D（第 364 题）。反过来画斜率是阻升比。
+   */
   const PX = 52
   const PY = 178
   const PW = 232
   const PH = 140
   const CL_MAX_AX = 1.7
-  const CD_MAX_AX = 0.16
+  // 展弦比小时诱导阻力大，C_D 会超过 0.16；按数据自适应，避免曲线跑出画布
+  const CD_MAX_AX = Math.max(0.16, Math.ceil(Math.max(...polar.map((p) => p.cd)) * 20) / 20)
 
   const toXY = (c: number, d: number) => ({
-    x: PX + (c / CL_MAX_AX) * PW,
-    y: PY - (d / CD_MAX_AX) * PH,
+    x: PX + (d / CD_MAX_AX) * PW,
+    y: PY - (c / CL_MAX_AX) * PH,
   })
 
   const polarPath = useMemo(() => {
@@ -140,17 +146,17 @@ export default function E2SpeedRatio({ values }: { values: Record<string, number
         {/* ── 极曲线 ─────────────────────────────────────────────── */}
         <div className="rounded-md border border-panel-line bg-panel-raised p-3">
           <p className="mb-1 text-2xs font-bold uppercase tracking-wider text-panel-muted">
-            极曲线 · C_D 对 C_L
+            极曲线 · C_D 横轴 / C_L 纵轴
           </p>
           <svg
             viewBox="0 0 300 210"
             className="w-full"
             role="img"
-            aria-label={`极曲线。当前升力系数 ${cl.toFixed(2)}，阻力系数 ${cd.toFixed(
+            aria-label={`极曲线，C_D 横轴、C_L 纵轴。当前升力系数 ${cl.toFixed(2)}，阻力系数 ${cd.toFixed(
               3,
             )}，升阻比 ${ld.toFixed(1)}。最大升阻比点位于升力系数 ${bestLd.cl.toFixed(
               2,
-            )} 处，而最大升力系数点在其右侧 ${clMaxPoint.cl.toFixed(2)}。`}
+            )} 处，而最大升力系数点在其右上方 ${clMaxPoint.cl.toFixed(2)}。`}
           >
             <g opacity="0.22">
               {Array.from({ length: 5 }, (_, i) => (
@@ -181,10 +187,10 @@ export default function E2SpeedRatio({ values }: { values: Record<string, number
             <line x1={PX} y1={PY} x2={PX + PW} y2={PY} stroke="#5f7fb5" strokeWidth="1.2" />
             <line x1={PX} y1={PY} x2={PX} y2={PY - PH} stroke="#5f7fb5" strokeWidth="1.2" />
             <text x={PX + PW} y={PY + 14} textAnchor="end" fontSize="9" fill="#a8bcd6" fontFamily="monospace">
-              C_L →
+              C_D →
             </text>
             <text x={PX - 4} y={PY - PH + 4} textAnchor="end" fontSize="9" fill="#a8bcd6" fontFamily="monospace">
-              C_D
+              C_L
             </text>
 
             {/* 极曲线 */}
@@ -239,9 +245,10 @@ export default function E2SpeedRatio({ values }: { values: Record<string, number
             <circle cx={cur.x} cy={cur.y} r="5" fill="#ff6b35" stroke="#ffffff" strokeWidth="1.4" />
           </svg>
           <p className="mt-1 text-2xs leading-relaxed text-panel-muted">
-            绿虚线 = 原点到曲线的切线方向（最大升阻比）；橙点 = 你当前的迎角。
-            <span className="text-panel-warn">注意橙点在绿点左边</span>——
-            升阻比最优的迎角，小于最大升力系数的迎角。
+            绿虚线 = 原点到曲线的切线，<span className="text-panel-ok">它的斜率就是升阻比</span>，
+            切点即最大升阻比；黄框 = 最大升力系数点。
+            <span className="text-panel-warn">黄框在切点右上方</span>——
+            升阻比最优的迎角，小于最大升力系数的迎角（第 372 题）。
           </p>
         </div>
 

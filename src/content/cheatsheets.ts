@@ -58,7 +58,7 @@ export const aeroCard: CheatsheetCard = {
     { term: '失速物理原因', value: '机翼上表面附面层大部分分离', note: '392' },
     { term: '常规布局失速', value: '机翼向上的力与尾翼向下的力都降低', note: '254' },
     { term: '失速改出', value: '立即推杆到底', note: '减小迎角 + 加油门（215）' },
-    { term: '安全飞行原则', value: '最大升力系数与临界迎角以下的组合', note: '345' },
+    { term: '安全飞行原则', value: '小于最大升力系数和临界迎角的两个限定值', note: '345' },
     { term: '会超临界的场景', value: '低速、高速、转弯', note: '三种都会（253）' },
     { term: '放下襟翼', value: 'C_L↑，临界迎角↓，失速速度↓', note: '382 / 183' },
     { term: '前缘结冰', value: 'C_L↓，临界迎角↓', note: '升力小于干净翼面（370）' },
@@ -157,7 +157,7 @@ export const performanceCard: CheatsheetCard = {
     { term: '高度升高', value: 'ρ↓ → 推力↓ → 爬升率↓', note: '496' },
     { term: '起降距离', value: '高原更长', note: '496 / 410' },
     { term: 'Vx 与 Vy 随高度', value: 'Vx 增大，Vy 减小', note: '464' },
-    { term: 'Vx 近似', value: 'Vx ≈ √3·Vs', note: '最佳爬升角速度' },
+    { term: 'Vx 定义', value: '剩余推力最大点', note: '题库只考随高度↑，倍数不臆造' },
     { term: 'Vy 近似', value: '略小于 Vx', note: '最佳爬升率速度' },
     { term: '失速速度', value: 'Vs = √(2W / ρSC_Lmax)', note: '341' },
     { term: '载重增大', value: '失速速度增大', note: '341' },
@@ -247,10 +247,96 @@ export const formulaCard: CheatsheetCard = {
   ],
 }
 
+/* ── 6. 起降与着陆 ───────────────────────────────────────────────────── */
+
+export const takeoffLandingCard: CheatsheetCard = {
+  id: 'takeoff-landing',
+  title: '起降与着陆速查卡',
+  subtitle: '逆风为什么省跑道、拉平快慢怎么定、接地那一下地效在帮谁。',
+  mnemonic: '逆风起飞滑跑短，顺风着陆下滑点后移；下降快拉杆就快。',
+  links: [
+    { label: '实验 E8 侧风着陆', to: '/labs/sidewind-landing' },
+    { label: '实验 E7 爬升与性能', to: '/labs/climb-performance' },
+  ],
+  rows: [
+    { term: '逆风起飞', value: '相对气流大，达到起飞速度所需地速小 → 滑跑距离缩短', note: '238' },
+    { term: '最大起飞重量', value: '航空器开始起飞滑跑时的重量', note: '106' },
+    { term: '起飞滑跑操纵', value: '逐渐推油门至大车，达起飞速度时柔和拉杆', note: '659' },
+    { term: '下滑角', value: '飞行轨迹与水平面的夹角', note: '193' },
+    { term: '顺风着陆', value: '地速增大、下滑角减小，下滑点适当后移、速度比正常小', note: '647' },
+    { term: '收油门过早过粗', value: '拉平速度小、下沉快，易拉平低', note: '839' },
+    { term: '收油门过晚过细', value: '拉平速度大、下沉慢，易拉平高', note: '840' },
+    { term: '拉平前俯角大下降快', value: '开始拉平时机稍早', note: '844' },
+    { term: '拉杆快慢', value: '与下降快慢相适应：下降快则拉杆快，下降慢则拉杆慢', note: '845 / 846' },
+    { term: '地面效应', value: '诱导阻力减小、升阻比提高，近地获得额外升力', note: '219' },
+    { term: '地效开始高度', value: '离地小于半翼展时明显', note: '465' },
+    { term: '着陆遇顺风切变', value: '空速减小、升力下降，掉至下滑线以下', note: '573' },
+    { term: '着陆遇逆风切变', value: '空速增大、升力增加，升到下滑线之上', note: '574' },
+    { term: '侧风偏侧接地', value: '向偏侧方向打舵修正偏航，反方向压副翼阻止偏转', note: '470' },
+  ],
+}
+
+/* ── 7. 航空器系统与动力 ─────────────────────────────────────────────── */
+
+export const aircraftSystemCard: CheatsheetCard = {
+  id: 'aircraft-system',
+  title: '航空器系统与动力速查卡',
+  subtitle: '扭矩反作用拧机身、桨叶角随载荷变、电机转速按分钟数。',
+  mnemonic: '顺时针桨向左滚，变距起飞桨叶角小，转速按每分钟转。',
+  links: [
+    { label: '实验 E6 多旋翼偏航', to: '/labs/multirotor-yaw' },
+  ],
+  rows: [
+    { term: '螺旋桨扭矩反作用', value: '机身向旋转反方向滚转', note: '顺时针桨→向左滚（218 / 452 / 635）' },
+    { term: '旋翼反扭矩', value: '迫使机体朝旋翼旋转的反方向偏转，大小随发动机功率', note: '460' },
+    { term: '抵消旋翼反扭矩', value: '尾桨产生反向力矩，或上下旋翼反向旋转', note: '476 / 459' },
+    { term: '定距桨功率仪表', value: '用转速指示器反映功率与限制', note: '25' },
+    { term: '变距螺旋桨', value: '恒速桨自动调桨叶角维持转速；起飞爬升保持高转速、减小桨叶角', note: '23' },
+    { term: '电机转速单位', value: '每分钟转数（rpm）', note: '3000 转即每分钟 3000 转（701）' },
+    { term: '桨叶 ccw 标记', value: '从上方观察该桨逆时针旋转', note: '675' },
+    { term: '活塞发动机慢车过久', value: '混合气过浓、燃烧不充分，燃烧室与电嘴积炭', note: '5' },
+    { term: '爆震最易发生', value: '大进气压力叠加小转速', note: '616' },
+    { term: '涡轮增压作用', value: '提高进气压力与含氧量，增大输出马力', note: '613' },
+    { term: '燃油增压泵', value: '爬升、下降及特殊姿态下保证正常供油', note: '610' },
+    { term: '滑翔状态', value: '发动机小油门、怠速甚至关机', note: '265' },
+    { term: '长时间爬升', value: '发动机温度易高，应适时定高待指标正常再爬', note: '653' },
+  ],
+}
+
+/* ── 8. 能见度与气象 ─────────────────────────────────────────────────── */
+
+export const visibilityWeatherCard: CheatsheetCard = {
+  id: 'visibility-weather',
+  title: '能见度与气象速查卡',
+  subtitle: '逆温生雾、对流层递减率、风切变在起降时怎么捣乱。',
+  mnemonic: '三大要素温压湿；逆温易生雾；顺风切变掉高度。',
+  links: [
+    { label: '实验 M1 高度表在骗你', to: '/labs/altitude-lie' },
+  ],
+  rows: [
+    { term: '三大气象要素', value: '气温、气压、空气湿度', note: '风/云/降水属天气现象（489）' },
+    { term: '对流层特征', value: '气温随高度降低、温湿度水平不均、垂直混合强', note: '484' },
+    { term: '平均气温垂直递减率', value: '0.65 ℃/100 m', note: '485' },
+    { term: '等温层', value: '气温垂直递减率等于零的气层', note: '493' },
+    { term: '平流层', value: '臭氧吸收紫外辐射，气温随高度升高', note: '487' },
+    { term: '逆温', value: '夜间低层降温形成，是雾和烟幕的有利条件', note: '520' },
+    { term: '雾', value: '接近地面的空气冷却到露点，从地表开始约 50 ft 内的云', note: '525' },
+    { term: '能见度测量', value: '目测或大气透射仪、激光能见度仪；望远镜目测错误', note: '556' },
+    { term: '气象光学视程', value: '2700K 平行光束削弱至 5% 所通过的路程', note: '557' },
+    { term: '最小能见度', value: '能见度因方向而异时其中最小的能见距离', note: '559' },
+    { term: '国际能见度定义', value: '烟雾<1km，薄雾1~2km，霾2~5km', note: '560' },
+    { term: '强上升气流', value: '防过载超规定，应适当减小飞行速度', note: '20' },
+    { term: '雷暴消散阶段', value: '下降气流遍布云中', note: '543' },
+  ],
+}
+
 export const cheatsheetCards: CheatsheetCard[] = [
   aeroCard,
   stabilityCard,
   multirotorCard,
   performanceCard,
   formulaCard,
+  takeoffLandingCard,
+  aircraftSystemCard,
+  visibilityWeatherCard,
 ]
