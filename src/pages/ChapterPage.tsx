@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { chapterById, experiments, knowledgePoints, siteMeta } from '@/content'
 import PageHeader from '@/components/ui/PageHeader'
 import ExperimentCard from '@/components/ui/ExperimentCard'
+import { InlineMd } from '@/components/formula/Markdown'
 
 export default function ChapterPage() {
   const { chapterId } = useParams<{ chapterId: string }>()
@@ -66,7 +67,7 @@ export default function ChapterPage() {
                       {p.title}
                     </h3>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
-                      {p.summary}
+                      <InlineMd text={p.summary} />
                     </p>
                   </Link>
                 </li>

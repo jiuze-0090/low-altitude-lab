@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Check, X, Lightbulb, ArrowRight } from 'lucide-react'
 
 import type { Prediction } from '@/types/content'
-import Markdown from '@/components/formula/Markdown'
+import Markdown, { InlineMd } from '@/components/formula/Markdown'
 
 /**
  * 预测 → 揭晓 → 归因
@@ -117,7 +117,7 @@ export default function PredictionBlock({
                       </span>
                       {showAsWrong && opt.wrongHint && (
                         <span className="mt-1.5 block text-xs leading-relaxed text-bad">
-                          {opt.wrongHint}
+                          <InlineMd text={opt.wrongHint} />
                         </span>
                       )}
                     </span>

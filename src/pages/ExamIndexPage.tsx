@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Search, X, ArrowRight } from 'lucide-react'
 
 import PageHeader from '@/components/ui/PageHeader'
+import { InlineMd } from '@/components/formula/Markdown'
 import { experiments, chapters, siteMeta } from '@/content'
 import {
   authorities,
@@ -195,7 +196,7 @@ export default function ExamIndexPage() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block text-xs leading-relaxed text-ink">
-                          {i.gist}
+                          <InlineMd text={i.gist} />
                         </span>
                         <span className="mt-0.5 block truncate text-2xs text-ink-muted group-hover:text-primary-text">
                           出自 · {i.experimentTitle}
@@ -231,7 +232,7 @@ export default function ExamIndexPage() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block text-xs leading-relaxed text-ink">
-                          {i.gist}
+                          <InlineMd text={i.gist} />
                         </span>
                         <span className="mt-0.5 block truncate text-2xs text-ink-muted group-hover:text-primary-text">
                           出自 · {i.table}

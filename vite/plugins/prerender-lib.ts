@@ -26,6 +26,20 @@ export function attr(value: unknown): string {
   return esc(value).replace(/'/g, '&#39;')
 }
 
+/**
+ * 正文用的行内文本：先转义，再把 **加粗** 转成 <strong>。
+ * 与客户端 InlineMd 组件行为一致，保证预渲染 HTML 与 React 挂载后的视觉相同。
+ * 注意顺序：必须先 esc 再替换，否则内容里的 < > 会变成真标签。
+ */
+export function escInline(value: unknown): string {
+  return esc(value).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+}
+
+/** meta description / JSON-LD 用的纯文本：去掉 Markdown 加粗标记，不留星号 */
+export function plainText(value: unknown): string {
+  return String(value ?? '').replace(/\*\*([^*]+)\*\*/g, '$1')
+}
+
 /** 判断文本是否含公式 */
 function hasFormula(src: string): boolean {
   return /\$\$[\s\S]+?\$\$|\$[^$\n]+?\$/.test(src)

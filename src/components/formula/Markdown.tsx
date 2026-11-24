@@ -101,6 +101,34 @@ export default function Markdown({ content }: { content: string }) {
 }
 
 /**
+ * 行内加粗渲染
+ * ---------------------------------------------------------------------------
+ * 摘要类字段（summary / hook / onYourStick / wrongHint / gist 等）在内容里
+ * 沿用了 Markdown 的 **加粗** 写法，但它们是纯文本直出，星号会原样显示。
+ * 这里只做一件事：把 **xxx** 转成 <strong>xxx</strong>，不引入 <p> 包裹，
+ * 也不碰 $公式$（这些字段按约定不含公式），避免破坏卡片布局。
+ *
+ * 用 split 而非 dangerouslySetInnerHTML：内容来自本地静态数据，
+ * 但即便如此也不拼 HTML，杜绝未来改成用户输入时的 XSS 风险。
+ */
+export function InlineMd({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
+          <strong key={i} className="font-semibold text-ink">
+            {part.slice(2, -2)}
+          </strong>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  )
+}
+
+/**
  * 独立公式块
  * ---------------------------------------------------------------------------
  * 渲染失败时降级显示原始 TeX 源码，保证内容永远可见

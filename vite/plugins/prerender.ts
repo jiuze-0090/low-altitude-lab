@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { createServer, type Plugin } from 'vite'
 
-import { attr, esc, renderMarkdown } from './prerender-lib'
+import { attr, esc, escInline, plainText, renderMarkdown } from './prerender-lib'
 
 const ORIGIN = 'https://lab.nbyteair.com'
 
@@ -299,7 +299,7 @@ function homePage(d: PrerenderData): Page {
   const labLinks = d.experiments
     .map(
       (e) =>
-        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}（约 ${esc(e.minutes)} 分钟）</li>`,
+        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${escInline(e.hook)}（约 ${esc(e.minutes)} 分钟）</li>`,
     )
     .join('')
   // 全部知识点直达链接：28 个知识点页从首页一跳可达，
@@ -307,7 +307,7 @@ function homePage(d: PrerenderData): Page {
   const kpLinks = d.knowledgePoints
     .map(
       (k) =>
-        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${escInline(k.summary)}</li>`,
     )
     .join('')
   const body = pageShell(
@@ -354,7 +354,7 @@ function chapterPage(chapter: AnyObj, d: PrerenderData, t: (s: string) => string
     .filter(Boolean)
     .map(
       (k: AnyObj) =>
-        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${escInline(k.summary)}</li>`,
     )
     .join('')
   const exps = (chapter.experimentIds ?? [])
@@ -362,7 +362,7 @@ function chapterPage(chapter: AnyObj, d: PrerenderData, t: (s: string) => string
     .filter(Boolean)
     .map(
       (e: AnyObj) =>
-        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}</li>`,
+        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${escInline(e.hook)}</li>`,
     )
     .join('')
   return {
@@ -389,7 +389,7 @@ function knowledgePointPage(
   const title = String(kp.title ?? '')
   const summary = String(kp.summary ?? '')
   const parts: string[] = []
-  parts.push(`<h2>要点速览</h2><p>${esc(summary)}</p>`)
+  parts.push(`<h2>要点速览</h2><p>${escInline(summary)}</p>`)
   if (kp.body) parts.push(`<h2>原理详解</h2>${renderMarkdown(String(kp.body))}`)
   if (Array.isArray(kp.formulas) && kp.formulas.length) {
     parts.push(
@@ -412,7 +412,7 @@ function knowledgePointPage(
     .filter(Boolean)
     .map(
       (k: AnyObj) =>
-        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${escInline(k.summary)}</li>`,
     )
   if (siblings.length) {
     parts.push(`<h2>本章其他知识点</h2><ul>${siblings.join('')}</ul>`)
@@ -424,22 +424,22 @@ function knowledgePointPage(
     .filter(Boolean)
     .map(
       (e: AnyObj) =>
-        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}</li>`,
+        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${escInline(e.hook)}</li>`,
     )
   if (exps.length) {
     parts.push(`<h2>本章交互实验</h2><ul>${exps.join('')}</ul>`)
   }
 
   const lead = chapter
-    ? `所属章节：${esc(chapter.title)}。${summary}`
-    : summary
+    ? `所属章节：${esc(chapter.title)}。${escInline(summary)}`
+    : escInline(summary)
   return {
     path: `/points/${kp.id}`,
     title: t(title),
-    description: summary,
+    description: plainText(summary),
     body: pageShell(title, lead, parts.join('\n'), '', `/points/${kp.id}`),
     schema: [
-      articleSchema(`/points/${kp.id}`, title, summary),
+      articleSchema(`/points/${kp.id}`, title, plainText(summary)),
       breadcrumb(`/points/${kp.id}`, title),
     ],
   }
@@ -488,7 +488,7 @@ function experimentPage(
   if (Array.isArray(exp.examRefs) && exp.examRefs.length) {
     parts.push(
       `<h2>这在考试里怎么问</h2><ul>${exp.examRefs
-        .map((r: AnyObj) => `<li>${esc(r.code)}：${esc(r.gist)}</li>`)
+        .map((r: AnyObj) => `<li>${esc(r.code)}：${escInline(r.gist)}</li>`)
         .join('')}</ul>`,
     )
   }
@@ -506,7 +506,7 @@ function experimentPage(
     .filter(Boolean)
     .map(
       (k: AnyObj) =>
-        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${escInline(k.summary)}</li>`,
     )
   if (kps.length) {
     parts.push(`<h2>关联知识点</h2><ul>${kps.join('')}</ul>`)
@@ -519,20 +519,20 @@ function experimentPage(
     .filter(Boolean)
     .map(
       (e: AnyObj) =>
-        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}</li>`,
+        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${escInline(e.hook)}</li>`,
     )
   if (siblings.length) {
     parts.push(`<h2>本章其他实验</h2><ul>${siblings.join('')}</ul>`)
   }
 
-  const lead = chapter ? `所属章节：${esc(chapter.title)}。${hook}` : hook
+  const lead = chapter ? `所属章节：${esc(chapter.title)}。${escInline(hook)}` : escInline(hook)
   return {
     path: `/labs/${exp.slug}`,
     title: t(title),
-    description: hook,
+    description: plainText(hook),
     body: pageShell(title, lead, parts.join('\n'), '', `/labs/${exp.slug}`),
     schema: [
-      articleSchema(`/labs/${exp.slug}`, title, hook),
+      articleSchema(`/labs/${exp.slug}`, title, plainText(hook)),
       breadcrumb(`/labs/${exp.slug}`, title),
     ],
   }
@@ -546,7 +546,7 @@ function labsPage(d: PrerenderData, t: (s: string) => string): Page {
       const exps = (c.experimentIds ?? [])
         .map((id: string) => d.experimentById.get(id))
         .filter(Boolean)
-        .map((e: AnyObj) => `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}</li>`)
+        .map((e: AnyObj) => `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${escInline(e.hook)}</li>`)
         .join('')
       return exps ? `<h2>${esc(c.title)}</h2><ul>${exps}</ul>` : ''
     })
@@ -632,7 +632,7 @@ function examPage(d: PrerenderData, t: (s: string) => string): Page {
               (r: AnyObj) =>
                 `<a href="/labs/${attr(e.slug)}" title="${attr(r.gist ?? '')}">${esc(
                   r.code,
-                )}：${esc(r.gist ?? '')}</a>`,
+                )}：${escInline(r.gist ?? '')}</a>`,
             )
             .join('、')
           return `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>：${codes}</li>`

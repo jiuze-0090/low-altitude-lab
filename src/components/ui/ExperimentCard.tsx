@@ -3,6 +3,7 @@ import { ArrowRight, Clock } from 'lucide-react'
 
 import type { Experiment } from '@/types/content'
 import { chapterById } from '@/content'
+import { InlineMd } from '@/components/formula/Markdown'
 
 /**
  * 实验卡片
@@ -50,7 +51,7 @@ export default function ExperimentCard({
         {experiment.title}
       </h3>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">
-        {experiment.hook}
+        <InlineMd text={experiment.hook} />
       </p>
 
       <div className="mt-4 flex items-center gap-1.5 border-t border-hairline pt-3.5 text-sm font-semibold text-primary-text">

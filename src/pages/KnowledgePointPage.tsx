@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, FlaskConical, Hand } from 'lucide-react'
 
 import { knowledgePointById, knowledgePoints, experimentById, chapterById, siteMeta } from '@/content'
-import Markdown, { Formula } from '@/components/formula/Markdown'
+import Markdown, { Formula, InlineMd } from '@/components/formula/Markdown'
 
 export default function KnowledgePointPage() {
   const { pointId } = useParams<{ pointId: string }>()
@@ -56,7 +56,7 @@ export default function KnowledgePointPage() {
             {point.title}
           </h1>
           <p className="mt-2.5 max-w-prose text-[15px] leading-relaxed text-ink-soft">
-            {point.summary}
+            <InlineMd text={point.summary} />
           </p>
         </div>
       </header>
@@ -114,7 +114,9 @@ export default function KnowledgePointPage() {
                 <div className="mt-2.5 rounded-lg border border-hairline bg-accent-soft px-4 py-3.5">
                   <p className="flex gap-2.5 text-sm leading-relaxed text-ink">
                     <Hand size={15} className="mt-0.5 shrink-0 text-accent-ink" aria-hidden="true" />
-                    <span>{point.onYourStick}</span>
+                    <span>
+                      <InlineMd text={point.onYourStick} />
+                    </span>
                   </p>
                 </div>
               </section>

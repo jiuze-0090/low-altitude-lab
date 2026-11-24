@@ -5,7 +5,7 @@ import { ArrowLeft, BookOpen, Lightbulb, Target } from 'lucide-react'
 import { experiments, experimentBySlug, chapterById, knowledgePointById, siteMeta } from '@/content'
 import PredictionBlock from '@/components/experiment/PredictionBlock'
 import Cheatsheet from '@/components/ui/Cheatsheet'
-import Markdown from '@/components/formula/Markdown'
+import Markdown, { InlineMd } from '@/components/formula/Markdown'
 import ExperimentCanvas from '@/components/experiment/ExperimentCanvas'
 import { getExperimentComponent } from '@/experiments'
 
@@ -94,7 +94,7 @@ export default function ExperimentPage() {
             {experiment.title}
           </h1>
           <p className="mt-2.5 max-w-prose text-[15px] leading-relaxed text-ink-soft">
-            {experiment.hook}
+            <InlineMd text={experiment.hook} />
           </p>
         </div>
       </header>
@@ -207,7 +207,7 @@ export default function ExperimentPage() {
                           {p.title}
                         </span>
                         <span className="mt-0.5 block text-2xs leading-relaxed text-ink-muted">
-                          {p.summary}
+                          <InlineMd text={p.summary} />
                         </span>
                       </Link>
                     </li>
