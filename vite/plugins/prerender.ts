@@ -139,7 +139,7 @@ function buildPage(path: string, d: PrerenderData): Page | null {
     const kp = d.knowledgePointById.get(id)
     if (!kp) return null
     const chapter = d.chapterById.get(kp.chapterId)
-    return knowledgePointPage(kp, chapter, t)
+    return knowledgePointPage(kp, chapter, d, t)
   }
 
   // 实验页
@@ -148,7 +148,7 @@ function buildPage(path: string, d: PrerenderData): Page | null {
     const exp = d.experimentBySlug.get(slug)
     if (!exp) return null
     const chapter = d.chapterById.get(exp.chapterId)
-    return experimentPage(exp, chapter, t)
+    return experimentPage(exp, chapter, d, t)
   }
 
   // 章节页
@@ -182,16 +182,62 @@ function buildPage(path: string, d: PrerenderData): Page | null {
 }
 
 /* -------------------------------------------------------------------------- */
+/* 站内导航                                                                    */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * 页脚导航
+ * ---------------------------------------------------------------------------
+ * 预渲染正文原本是一个孤岛：知识点页 / 实验页 / 考点索引页里一个站内 <a> 都没有，
+ * 百度蜘蛛抓到后没有任何路径能走到下一个页面，只能靠 sitemap 兜底，
+ * 28 个知识点页面在索引里就是 28 个孤岛。
+ *
+ * 所有页面的静态正文都统一带上这组导航 → 至少保证「站内可达 + 权重能流动」。
+ * 入口与 src/components/layout/SiteHeader.tsx 的 NAV 保持一致。
+ */
+const SITE_NAV: Array<{ to: string; label: string }> = [
+  { to: '/', label: '首页' },
+  { to: '/principles', label: '原理目录' },
+  { to: '/labs', label: '实验室' },
+  { to: '/guides', label: '速查' },
+  { to: '/cheatsheets', label: '原理卡' },
+  { to: '/exam', label: '考点' },
+  { to: '/tools', label: '工具' },
+  { to: '/about', label: '关于' },
+]
+
+function siteNavHtml(currentPath: string): string {
+  const items = SITE_NAV.map((n) => {
+    const isCur = n.to === currentPath
+    return `<a href="${attr(n.to)}"${isCur ? ' aria-current="page"' : ''} style="${
+      isCur
+        ? 'font-weight:700;color:#1a2233;text-decoration:none'
+        : 'color:#3b5bdb;text-decoration:none'
+    }">${esc(n.label)}</a>`
+  }).join('')
+  return `<nav aria-label="站内导航" style="margin-top:40px;padding-top:20px;border-top:1px solid #e3e8f0;font-size:0.9rem"><a href="${attr(
+    '/',
+  )}" style="color:#3b5bdb;text-decoration:none;font-weight:700">低空原理实验室</a> · ${items}</nav>`
+}
+
+/* -------------------------------------------------------------------------- */
 /* 各页正文                                                                    */
 /* -------------------------------------------------------------------------- */
 
-function pageShell(title: string, lead: string, content: string, extra = ''): string {
+function pageShell(
+  title: string,
+  lead: string,
+  content: string,
+  extra = '',
+  currentPath = '',
+): string {
   return `
 <div class="seo-static" style="max-width:820px;margin:0 auto;padding:32px 20px 64px;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.75;color:#1a2233">
   <h1 style="font-size:1.9rem;line-height:1.3;margin:0 0 16px">${esc(title)}</h1>
   <p style="font-size:1.05rem;color:#44506a;margin:0 0 28px">${esc(lead)}</p>
   ${extra}
   <div class="seo-static-body">${content}</div>
+  ${siteNavHtml(currentPath)}
 </div>`.trim()
 }
 
@@ -256,11 +302,22 @@ function homePage(d: PrerenderData): Page {
         `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}（约 ${esc(e.minutes)} 分钟）</li>`,
     )
     .join('')
+  // 全部知识点直达链接：28 个知识点页从首页一跳可达，
+  // 而不是必须先进章节页再进知识点（爬虫深度越浅，抓取越快）。
+  const kpLinks = d.knowledgePoints
+    .map(
+      (k) =>
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+    )
+    .join('')
   const body = pageShell(
     String(d.siteMeta.title ?? '低空原理实验室'),
     desc,
     `<h2>六条原理主线</h2><ul>${chapterLinks}</ul>
-     <h2>交互实验室</h2><p>共 ${d.experiments.length} 个动手实验，覆盖 ${d.knowledgePoints.length} 个知识点。预测 → 揭晓 → 归因，把抽象的力变成你手上的一根杆。</p><ul>${labLinks}</ul>`,
+     <h2>交互实验室</h2><p>共 ${d.experiments.length} 个动手实验，覆盖 ${d.knowledgePoints.length} 个知识点。预测 → 揭晓 → 归因，把抽象的力变成你手上的一根杆。</p><ul>${labLinks}</ul>
+     <h2>全部知识点</h2><p>共 ${d.knowledgePoints.length} 条原理，每条都标出考法与对应操作。</p><ul>${kpLinks}</ul>`,
+    '',
+    '/',
   )
   return {
     path: '/',
@@ -284,7 +341,7 @@ function principlesPage(d: PrerenderData, t: (s: string) => string): Page {
     path: '/principles',
     title: t(title),
     description: desc,
-    body: pageShell(title, desc, list),
+    body: pageShell(title, desc, list, '', '/principles'),
     schema: [breadcrumb('/principles', title)],
   }
 }
@@ -316,12 +373,19 @@ function chapterPage(chapter: AnyObj, d: PrerenderData, t: (s: string) => string
       title,
       intro,
       `<h2>本章知识点</h2><ul>${kps}</ul><h2>本章交互实验</h2><ul>${exps}</ul>`,
+      '',
+      `/principles/${chapter.id}`,
     ),
     schema: [articleSchema(`/principles/${chapter.id}`, title, intro), breadcrumb(`/principles/${chapter.id}`, title)],
   }
 }
 
-function knowledgePointPage(kp: AnyObj, chapter: AnyObj | undefined, t: (s: string) => string): Page {
+function knowledgePointPage(
+  kp: AnyObj,
+  chapter: AnyObj | undefined,
+  d: PrerenderData,
+  t: (s: string) => string,
+): Page {
   const title = String(kp.title ?? '')
   const summary = String(kp.summary ?? '')
   const parts: string[] = []
@@ -340,6 +404,32 @@ function knowledgePointPage(kp: AnyObj, chapter: AnyObj | undefined, t: (s: stri
       `<h2>高频考法</h2><ul>${kp.examAngles.map((a: string) => `<li>${esc(a)}</li>`).join('')}</ul>`,
     )
   }
+  // 同章其他知识点：让爬虫能从任一知识点走到兄弟知识点，
+  // 也给读者一条「这个原理在整章里处于什么位置」的路径。
+  const siblings = ((chapter?.knowledgePointIds ?? []) as string[])
+    .filter((id) => id !== kp.id)
+    .map((id) => d.knowledgePointById.get(id))
+    .filter(Boolean)
+    .map(
+      (k: AnyObj) =>
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+    )
+  if (siblings.length) {
+    parts.push(`<h2>本章其他知识点</h2><ul>${siblings.join('')}</ul>`)
+  }
+
+  // 本章交互实验：知识点 ↔ 实验是双向关系，实验页也有反向链接
+  const exps = ((chapter?.experimentIds ?? []) as string[])
+    .map((id) => d.experimentById.get(id))
+    .filter(Boolean)
+    .map(
+      (e: AnyObj) =>
+        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}</li>`,
+    )
+  if (exps.length) {
+    parts.push(`<h2>本章交互实验</h2><ul>${exps.join('')}</ul>`)
+  }
+
   const lead = chapter
     ? `所属章节：${esc(chapter.title)}。${summary}`
     : summary
@@ -347,7 +437,7 @@ function knowledgePointPage(kp: AnyObj, chapter: AnyObj | undefined, t: (s: stri
     path: `/points/${kp.id}`,
     title: t(title),
     description: summary,
-    body: pageShell(title, lead, parts.join('\n')),
+    body: pageShell(title, lead, parts.join('\n'), '', `/points/${kp.id}`),
     schema: [
       articleSchema(`/points/${kp.id}`, title, summary),
       breadcrumb(`/points/${kp.id}`, title),
@@ -355,7 +445,12 @@ function knowledgePointPage(kp: AnyObj, chapter: AnyObj | undefined, t: (s: stri
   }
 }
 
-function experimentPage(exp: AnyObj, chapter: AnyObj | undefined, t: (s: string) => string): Page {
+function experimentPage(
+  exp: AnyObj,
+  chapter: AnyObj | undefined,
+  d: PrerenderData,
+  t: (s: string) => string,
+): Page {
   const title = String(exp.title ?? '')
   const hook = String(exp.hook ?? '')
   const parts: string[] = []
@@ -404,12 +499,38 @@ function experimentPage(exp: AnyObj, chapter: AnyObj | undefined, t: (s: string)
   } else if (exp.fieldNote) {
     parts.push(`<h2>实飞经验</h2>${renderMarkdown(String(exp.fieldNote))}`)
   }
+
+  // 关联知识点：实验 → 知识点 的正向链接（知识点页有反向的「本章交互实验」）
+  const kps = (Array.isArray(exp.knowledgePointIds) ? exp.knowledgePointIds : [])
+    .map((id: string) => d.knowledgePointById.get(id))
+    .filter(Boolean)
+    .map(
+      (k: AnyObj) =>
+        `<li><a href="/points/${attr(k.id)}">${esc(k.title)}</a>：${esc(k.summary)}</li>`,
+    )
+  if (kps.length) {
+    parts.push(`<h2>关联知识点</h2><ul>${kps.join('')}</ul>`)
+  }
+
+  // 同章其他实验
+  const siblings = ((chapter?.experimentIds ?? []) as string[])
+    .filter((id) => id !== exp.id)
+    .map((id) => d.experimentById.get(id))
+    .filter(Boolean)
+    .map(
+      (e: AnyObj) =>
+        `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>——${esc(e.hook)}</li>`,
+    )
+  if (siblings.length) {
+    parts.push(`<h2>本章其他实验</h2><ul>${siblings.join('')}</ul>`)
+  }
+
   const lead = chapter ? `所属章节：${esc(chapter.title)}。${hook}` : hook
   return {
     path: `/labs/${exp.slug}`,
     title: t(title),
     description: hook,
-    body: pageShell(title, lead, parts.join('\n')),
+    body: pageShell(title, lead, parts.join('\n'), '', `/labs/${exp.slug}`),
     schema: [
       articleSchema(`/labs/${exp.slug}`, title, hook),
       breadcrumb(`/labs/${exp.slug}`, title),
@@ -434,7 +555,7 @@ function labsPage(d: PrerenderData, t: (s: string) => string): Page {
     path: '/labs',
     title: t(title),
     description: desc,
-    body: pageShell(title, desc, list),
+    body: pageShell(title, desc, list, '', '/labs'),
     schema: [breadcrumb('/labs', title)],
   }
 }
@@ -450,7 +571,7 @@ function guidesPage(d: PrerenderData, t: (s: string) => string): Page {
     path: '/guides',
     title: t(title),
     description: desc,
-    body: pageShell(title, desc, `<h2>速查目录</h2><ul>${list}</ul><p>完整的规章数字表格请在页面内查看。</p>`),
+    body: pageShell(title, desc, `<h2>速查目录</h2><ul>${list}</ul><p>完整的规章数字表格请在页面内查看。</p>`, '', '/guides'),
     schema: [breadcrumb('/guides', title)],
   }
 }
@@ -458,14 +579,32 @@ function guidesPage(d: PrerenderData, t: (s: string) => string): Page {
 function cheatsheetsPage(d: PrerenderData, t: (s: string) => string): Page {
   const title = '原理速查卡'
   const desc = '气动、稳定性、多旋翼、飞行性能、常用公式——把飞行原理压成一张可打印的速查卡。'
+  // 每张卡自带 links[]（指向对应实验），是现成的站内链接来源
   const cards = (d.cheatsheetCards ?? [])
-    .map((c: AnyObj) => `<h2>${esc(c.title)}</h2><p>共 ${c.rows?.length ?? 0} 条速查项。</p>`)
+    .map((c: AnyObj) => {
+      const links = Array.isArray(c.links) ? c.links : []
+      const linkHtml = links.length
+        ? `<ul>${links
+            .map(
+              (l: AnyObj) =>
+                `<li><a href="${attr(l.to)}">${esc(l.label)}</a></li>`,
+            )
+            .join('')}</ul>`
+        : ''
+      return `<h2>${esc(c.title)}</h2><p>${esc(c.subtitle ?? '')}</p><p>共 ${c.rows?.length ?? 0} 条速查项。</p>${linkHtml}`
+    })
     .join('')
   return {
     path: '/cheatsheets',
     title: t(title),
     description: desc,
-    body: pageShell(title, desc, cards || '<p>原理速查卡，可在页面内查看与打印。</p>'),
+    body: pageShell(
+      title,
+      desc,
+      cards || '<p>原理速查卡，可在页面内查看与打印。</p>',
+      '',
+      '/cheatsheets',
+    ),
     schema: [breadcrumb('/cheatsheets', title)],
   }
 }
@@ -473,21 +612,44 @@ function cheatsheetsPage(d: PrerenderData, t: (s: string) => string): Page {
 function examPage(d: PrerenderData, t: (s: string) => string): Page {
   const title = '考点索引'
   const desc = '按章节汇总全部交互实验关联的题库考点编号，按题干或编号检索，快速定位原理对应的考题。'
+
+  // 每个考点码 → 指向引用它的实验页。
+  // 这一页是站内搜索价值最高的页面（131 条长尾词），
+  // 原来只是一堆纯文本题号，爬虫抓不到任何路径 → 现在每个码都能跳到对应原理。
   const list = d.chapters
     .map((c) => {
-      const refs = (c.experimentIds ?? [])
+      const exps = (c.experimentIds ?? [])
         .map((id: string) => d.experimentById.get(id))
         .filter(Boolean)
-        .flatMap((e: AnyObj) => e.examRefs ?? [])
-      const codes = refs.map((r: AnyObj) => esc(r.code)).join('、')
-      return codes ? `<h2>${esc(c.title)}</h2><p>${codes}</p>` : ''
+      const items = exps
+        .map((e: AnyObj) => {
+          const refs = (e.examRefs ?? []) as AnyObj[]
+          if (!refs.length) return ''
+          // 锚文本带 gist（考点摘要）而不是纯数字：
+          // 纯数字锚文本对搜索引擎零语义，加上关键词才是可被检索的入口。
+          const codes = refs
+            .map(
+              (r: AnyObj) =>
+                `<a href="/labs/${attr(e.slug)}" title="${attr(r.gist ?? '')}">${esc(
+                  r.code,
+                )}：${esc(r.gist ?? '')}</a>`,
+            )
+            .join('、')
+          return `<li><a href="/labs/${attr(e.slug)}">${esc(e.title)}</a>：${codes}</li>`
+        })
+        .filter(Boolean)
+        .join('')
+      return items
+        ? `<h2><a href="/principles/${attr(c.id)}">${esc(c.title)}</a></h2><ul>${items}</ul>`
+        : ''
     })
     .join('')
+
   return {
     path: '/exam',
     title: t(title),
     description: desc,
-    body: pageShell(title, desc, list),
+    body: pageShell(title, desc, list, '', '/exam'),
     schema: [breadcrumb('/exam', title)],
   }
 }
@@ -502,7 +664,7 @@ function toolsPage(d: PrerenderData, t: (s: string) => string): Page {
     path: '/tools',
     title: t(title),
     description: desc,
-    body: pageShell(title, desc, `<h2>可用工具</h2><ul>${tools}</ul>`),
+    body: pageShell(title, desc, `<h2>可用工具</h2><ul>${tools}</ul>`, '', '/tools'),
     schema: [breadcrumb('/tools', title)],
   }
 }
@@ -522,6 +684,8 @@ function aboutPage(d: PrerenderData, t: (s: string) => string): Page {
       desc,
       `<h2>我们是谁</h2><p>本站是${esc(orgFull)}（简称"${esc(d.siteMeta.org)}"）旗下面向 CAAC 无人机驾驶员理论考试的公益学习站点。</p>
        <h2>本站做什么</h2><p>把飞行原理讲清楚：每条原理都标注它在题库里的考法、在实操里对应的操作动作。预测 → 揭晓 → 归因，一步步把抽象的力变成你手上的一根杆。</p>${contact}`,
+      '',
+      '/about',
     ),
     schema: [orgSchema(), breadcrumb('/about', title)],
   }
