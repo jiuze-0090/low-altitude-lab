@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import { useNodeSignal } from '@/components/experiment/NodeFeed'
+import { useExperimentValues } from '@/components/experiment/ExperimentCanvas'
 
 /**
  * E3 · 迎角与失速
@@ -48,10 +49,68 @@ function cdOf(cl: number, alpha: number, crit: number): number {
   return base + 0.06 + (alpha - crit) * 0.012
 }
 
+/** 拖拽杆映射：SVG 内把手中心 y（向下增大）↔ 迎角（向上增大） */
+const DRAG_X = 288
+const DRAG_Y_TOP = 34 // α = +24°
+const DRAG_Y_BOTTOM = 166 // α = −4°
+const ALPHA_HI = 24
+const ALPHA_LO = -4
+const yToAlpha = (y: number) =>
+  ALPHA_HI - ((y - DRAG_Y_TOP) / (DRAG_Y_BOTTOM - DRAG_Y_TOP)) * (ALPHA_HI - ALPHA_LO)
+const alphaToY = (a: number) =>
+  DRAG_Y_TOP + ((ALPHA_HI - a) / (ALPHA_HI - ALPHA_LO)) * (DRAG_Y_BOTTOM - DRAG_Y_TOP)
+
 export default function E3AlphaStall({ values }: { values: Record<string, number> }) {
+  const setValue = useExperimentValues()
   const alpha = values.alpha ?? 4
   const v = values.speed ?? 18
   const iced = (values.ice ?? 0) >= 1
+
+  /* ── 拖拽迎角：Pointer Events 统一鼠标/触摸 ──────────────────────── */
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const [dragging, setDragging] = useState(false)
+  const handleY = alphaToY(alpha)
+
+  /** 屏幕坐标 → SVG viewBox 坐标（SVG 有缩放，不能直接用 clientY） */
+  const clientToSvgY = useCallback((clientY: number): number => {
+    const svg = svgRef.current
+    if (!svg) return clientY
+    const ctm = svg.getScreenCTM()
+    if (!ctm) return clientY
+    const pt = svg.createSVGPoint()
+    pt.x = 0
+    pt.y = clientY
+    return pt.matrixTransform(ctm.inverse()).y
+  }, [])
+
+  const applyDrag = useCallback(
+    (clientY: number) => setValue('alpha', Math.round(yToAlpha(clientToSvgY(clientY)))),
+    [setValue, clientToSvgY],
+  )
+
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent<SVGCircleElement>) => {
+      e.preventDefault()
+      e.currentTarget.setPointerCapture(e.pointerId)
+      setDragging(true)
+      applyDrag(e.clientY)
+    },
+    [applyDrag],
+  )
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<SVGCircleElement>) => {
+      if (!dragging) return
+      e.preventDefault()
+      applyDrag(e.clientY)
+    },
+    [dragging, applyDrag],
+  )
+  const endDrag = useCallback((e: React.PointerEvent<SVGCircleElement>) => {
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    }
+    setDragging(false)
+  }, [])
 
   const critAlpha = iced ? 11 : 16
   const stalled = alpha > critAlpha
@@ -280,12 +339,13 @@ export default function E3AlphaStall({ values }: { values: Record<string, number
             上表面气流分离
           </p>
           <svg
+            ref={svgRef}
             viewBox="0 0 320 200"
-            className="w-full"
+            className="w-full touch-none select-none"
             role="img"
             aria-label={`迎角 ${alpha.toFixed(1)} 度时的机翼绕流示意${
               stalled ? '，上表面出现明显分离涡' : ''
-            }`}
+            }；可拖动右侧橙色把手改变迎角`}
           >
             <g opacity="0.16">
               {Array.from({ length: 8 }, (_, i) => (
@@ -399,14 +459,111 @@ export default function E3AlphaStall({ values }: { values: Record<string, number
                 L = {lift.toFixed(1)} N
               </text>
             </g>
+
+            {/* ── 拖拽迎角杆（样板交互）─────────────────────────────
+                竖直导轨：上=大迎角。把手命中区放大到 r=17，移动端好抓。 */}
+            <g>
+              <line
+                x1={DRAG_X}
+                y1={DRAG_Y_TOP}
+                x2={DRAG_X}
+                y2={DRAG_Y_BOTTOM}
+                stroke="#5f7fb5"
+                strokeWidth="3"
+                strokeLinecap="round"
+                opacity="0.55"
+              />
+              {[ALPHA_HI, 12, 0, ALPHA_LO].map((a) => (
+                <g key={a}>
+                  <line
+                    x1={DRAG_X - 6}
+                    y1={alphaToY(a)}
+                    x2={DRAG_X + 6}
+                    y2={alphaToY(a)}
+                    stroke="#8fa8c9"
+                    strokeWidth="1"
+                    opacity="0.7"
+                  />
+                  <text
+                    x={DRAG_X - 10}
+                    y={alphaToY(a) + 3}
+                    textAnchor="end"
+                    fontSize="8"
+                    fill="#8fa8c9"
+                    fontFamily="monospace"
+                  >
+                    {a}°
+                  </text>
+                </g>
+              ))}
+              {/* 透明大命中圆（触摸友好） */}
+              <circle
+                cx={DRAG_X}
+                cy={handleY}
+                r="17"
+                fill="transparent"
+                className="cursor-grab active:cursor-grabbing"
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={endDrag}
+                onPointerCancel={endDrag}
+                role="slider"
+                aria-label="拖拽改变迎角"
+                aria-valuemin={ALPHA_LO}
+                aria-valuemax={ALPHA_HI}
+                aria-valuenow={Number(alpha.toFixed(1))}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowUp') {
+                    e.preventDefault()
+                    setValue('alpha', Math.min(ALPHA_HI, Math.round(alpha) + 1))
+                  } else if (e.key === 'ArrowDown') {
+                    e.preventDefault()
+                    setValue('alpha', Math.max(ALPHA_LO, Math.round(alpha) - 1))
+                  }
+                }}
+              />
+              {/* 可见把手 */}
+              <circle
+                cx={DRAG_X}
+                cy={handleY}
+                r={dragging ? 10 : 8.5}
+                fill={stalled ? '#c0342b' : '#ff6b35'}
+                stroke="#ffffff"
+                strokeWidth="2"
+                pointerEvents="none"
+              />
+              <line
+                x1={DRAG_X - 4}
+                y1={handleY}
+                x2={DRAG_X + 4}
+                y2={handleY}
+                stroke="#ffffff"
+                strokeWidth="1.5"
+                pointerEvents="none"
+              />
+              <text
+                x={DRAG_X}
+                y={DRAG_Y_BOTTOM + 15}
+                textAnchor="middle"
+                fontSize="8.5"
+                fill={dragging ? '#ff9a6e' : '#8fa8c9'}
+                fontFamily="monospace"
+                pointerEvents="none"
+              >
+                {dragging ? '拖动中' : '拖我 ↑'}
+              </text>
+            </g>
           </svg>
           <p className="mt-1 text-2xs leading-relaxed text-panel-muted">
+            <span className="text-panel-accent">试试直接拖右侧的橙色把手</span>
+            （或用方向键）改变迎角——向上拖抬头。
             {stalled ? (
               <span className="text-panel-bad">
-                上表面附面层已大面积分离——升力掉下来，阻力涨上去。
+                {' '}上表面附面层已大面积分离——升力掉下来，阻力涨上去。
               </span>
             ) : (
-              '上表面气流仍贴着翼面走，附着流稳定。'
+              ' 上表面气流仍贴着翼面走，附着流稳定。'
             )}
           </p>
         </div>

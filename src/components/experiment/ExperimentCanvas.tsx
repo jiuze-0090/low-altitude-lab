@@ -1,10 +1,27 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { RotateCcw } from 'lucide-react'
 
 import type { Control, ExperimentNode } from '@/types/content'
 import NodeFeed, { NodeContext } from '@/components/experiment/NodeFeed'
 import type { FiredNode, SignalMap } from '@/components/experiment/NodeFeed'
+
+/**
+ * 参数写入通道
+ * ---------------------------------------------------------------------------
+ * 实验组件默认只读 values（滑块是唯一入口）。但「拖拽操纵杆」这类交互需要
+ * 组件反向写回参数——否则画面动了、失速节点却不触发（信号读的是 values）。
+ * 用 Context 暴露 setter，避免改动实验组件注册表契约（仍是 ({values}) => ReactNode）。
+ */
+type SetValue = (id: string, value: number) => void
+const ValuesContext = createContext<SetValue | null>(null)
+
+/** 组件内取参数写入器；不在画布内调用时抛错，避免静默失效 */
+export function useExperimentValues(): SetValue {
+  const setValue = useContext(ValuesContext)
+  if (!setValue) throw new Error('useExperimentValues 必须在 ExperimentCanvas 内使用')
+  return setValue
+}
 
 /**
  * 交互画布容器
@@ -40,6 +57,19 @@ export default function ExperimentCanvas({
   useEffect(() => {
     setValues(initial)
   }, [initial])
+
+  /** 组件反向写参数：按控件声明的 min/max/step 夹取，越界值不进状态 */
+  const setValue = useCallback<SetValue>(
+    (id, raw) => {
+      const c = controls.find((x) => x.id === id)
+      if (!c || !Number.isFinite(raw)) return
+      const clamped = Math.min(c.max, Math.max(c.min, raw))
+      const stepped = c.step > 0 ? Math.round(clamped / c.step) * c.step : clamped
+      const snapped = Number(stepped.toFixed(4))
+      setValues((prev) => (prev[id] === snapped ? prev : { ...prev, [id]: snapped }))
+    },
+    [controls],
+  )
 
   const dirty = controls.some((c) => values[c.id] !== c.value)
 
@@ -96,9 +126,11 @@ export default function ExperimentCanvas({
   return (
     <div>
       <NodeContext.Provider value={ctxValue}>
-        <div className="bg-panel">
-          <div className="px-4 py-5 sm:px-6">{render(values)}</div>
-        </div>
+        <ValuesContext.Provider value={setValue}>
+          <div className="bg-panel">
+            <div className="px-4 py-5 sm:px-6">{render(values)}</div>
+          </div>
+        </ValuesContext.Provider>
       </NodeContext.Provider>
 
       {controls.length > 0 && (
