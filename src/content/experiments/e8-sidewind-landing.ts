@@ -95,7 +95,7 @@ export const e8SidewindLanding: Experiment = {
 
   controls: [
     { id: 'crossWind', label: '侧风分量', unit: 'm/s', min: -12, max: 12, step: 1, value: 8, precision: 0 },
-    { id: 'approachSpeed', label: '进近地速', unit: 'm/s', min: 18, max: 40, step: 1, value: 26, precision: 0 },
+    { id: 'approachSpeed', label: '进近地速', unit: 'm/s', min: 18, max: 50, step: 1, value: 45, precision: 0 },
     { id: 'flatQuality', label: '拉平质量', unit: '%', min: 0, max: 100, step: 5, value: 70, precision: 0 },
     { id: 'mass', label: '载重', unit: 'kg', min: 8, max: 25, step: 1, value: 12, precision: 0 },
   ],

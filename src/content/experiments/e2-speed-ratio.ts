@@ -53,7 +53,7 @@ export const e2SpeedRatio: Experiment = {
       },
       {
         id: 'd',
-        text: '不变——迎角不变，迎力系数不变，所以阻力也不变',
+        text: '不变——迎角不变，阻力系数不变，所以阻力也不变',
         correct: false,
         wrongHint:
           '迎角不变确实意味着阻力系数 C_D 不变，但阻力公式 D = ½ρV²S·C_D 里还有动压这一项，它随速度平方变化。',
